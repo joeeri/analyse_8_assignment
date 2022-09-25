@@ -1,0 +1,44 @@
+2022-06-19 22:34:16,superadmin,Logged in,rights: superadmin,No
+2022-06-19 22:34:21,superadmin,Get logs,None,No
+2022-06-19 22:35:10,superadmin,Get logs,None,No
+2022-06-19 22:35:44,superadmin,Get logs,None,No
+2022-06-19 22:36:46,superadmin,Searched members, input search command: hi,No
+2022-06-19 22:37:49,superadmin,Get logs,None,No
+2022-06-19 22:38:11,superadmin,Logged out,rights: superadmin,No
+2022-06-19 22:48:23,superadmin,Logged in,rights: superadmin,No
+2022-06-19 22:50:24,superadmin,Logged in,rights: superadmin,No
+2022-06-19 22:51:25,superadmin,Added to the database, added employee: sysadmin,No
+2022-06-19 22:53:27,superadmin,Added to the database, added employee: advisor,No
+2022-06-19 22:56:48,sysadmin,Logged in,rights: systemadmin,No
+2022-06-19 22:57:24,testing1,Logged in,rights: advisor,No
+2022-06-19 22:59:43,testing1,Exit system,rights: advisor,No
+2022-06-19 22:59:43,testing1,Logged out,rights: advisor,No
+2022-06-19 22:59:59,superadmin,Logged in,rights: superadmin,No
+2022-06-19 23:00:20,superadmin,Deleted from database,employee 3 deleted,No
+2022-06-19 23:00:37,superadmin,Delete member, search for deletion member: name,Yes
+2022-06-19 23:01:19,superadmin,Logged in,rights: superadmin,No
+2022-06-19 23:06:07,superadmin,List employees with rights, all employees with rights,No
+2022-06-19 23:06:24,superadmin,Searched members, input search command: sys,No
+2022-06-19 23:07:02,superadmin,Searched members, input search command: joeri,No
+2022-06-19 23:12:36,superadmin,Logged in,rights: superadmin,No
+2022-06-19 23:12:46,superadmin,Searched members, input search command: joeri,No
+2022-06-19 23:14:03,superadmin,Logged in,rights: superadmin,No
+2022-06-19 23:14:06,superadmin,List employees with rights, all employees with rights,No
+2022-06-19 23:14:17,superadmin,Searched members, input search command: Henk,No
+2022-06-19 23:22:17,superadmin,Logged in,rights: superadmin,No
+2022-06-19 23:22:23,superadmin,List employees with rights, all employees with rights,No
+2022-06-19 23:22:30,superadmin,Searched members, input search command: joeri,No
+2022-06-19 23:22:41,superadmin,Exit system,rights: superadmin,No
+2022-06-19 23:22:41,superadmin,Logged out,rights: superadmin,No
+2022-09-06 14:04:43,superadmin,Logged in,rights: superadmin,No
+2022-09-06 14:04:55,superadmin,Logged out,rights: superadmin,No
+2022-09-06 14:13:46,None,"Failed login, user:dnc, attempt: 1",None,No
+2022-09-06 14:14:39,None,"Failed login, user:bla, attempt: 1",None,No
+2022-09-06 15:09:49,None,"Failed login, username: 1bla, attempt: 1",None,No
+2022-09-06 15:10:48,superadmin,Logged in,rights: superadmin,No
+2022-09-06 15:25:06,superadmin,Logged in,rights: superadmin,No
+2022-09-06 15:26:22,superadmin,Logged in,rights: superadmin,No
+2022-09-06 15:31:12,superadmin,Logged in,rights: superadmin,No
+2022-09-06 15:59:44,superadmin,Logged in,rights: superadmin,No
+2022-09-06 15:59:52,superadmin,Exit system,rights: superadmin,No
+2022-09-06 15:59:52,superadmin,Logged out,rights: superadmin,No
