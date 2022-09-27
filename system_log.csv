@@ -42,3 +42,142 @@
 2022-09-06 15:59:44,superadmin,Logged in,rights: superadmin,No
 2022-09-06 15:59:52,superadmin,Exit system,rights: superadmin,No
 2022-09-06 15:59:52,superadmin,Logged out,rights: superadmin,No
+2022-09-25 11:22:26,superadmin,Logged in,rights: superadmin,No
+2022-09-25 11:26:37,None,"Failed login, username: bla, attempt: 1",None,No
+2022-09-25 11:26:43,None,"Failed login, username: bla, attempt: 2",None,No
+2022-09-25 11:26:46,None,"Failed login, username: bla, attempt: 3",None,No
+2022-09-25 11:26:49,None,"Failed login, username: bla, attempt: 4",None,No
+2022-09-25 11:26:53,None,"Failed login, username: bla, attempt: 5",None,No
+2022-09-25 11:26:56,None,Session is stopped after five wrong login attemps,username: username: bla,Yes
+2022-09-25 11:29:41,None,"Failed login, username: bla, attempt: 1",None,No
+2022-09-25 11:29:43,None,"Failed login, username: bla, attempt: 2",None,No
+2022-09-25 11:29:47,None,"Failed login, username: bla, attempt: 3",None,No
+2022-09-25 11:29:52,None,"Failed login, username: bla, attempt: 4",None,No
+2022-09-25 11:29:56,None,"Failed login, username: bla, attempt: 5",None,No
+2022-09-25 11:30:00,None,Session is stopped after five wrong login attemps,username: username: bla,Yes
+2022-09-25 11:38:09,None,"Failed login, username: bla, attempt: 1",None,No
+2022-09-25 11:38:19,None,"Failed login, username: bla, attempt: 2",None,No
+2022-09-25 11:38:34,None,"Failed login, username: bla, attempt: 3",None,No
+2022-09-25 11:38:36,None,"Failed login, username: bla, attempt: 4",None,No
+2022-09-25 11:38:37,None,"Failed login, username: bla, attempt: 5",None,No
+2022-09-25 11:38:46,None,Session is stopped after five wrong login attemps,username: username: bla,Yes
+2022-09-25 12:58:23,superadmin,Logged in,rights: superadmin,No
+2022-09-25 13:33:13,superadmin,Logged in,rights: superadmin,No
+2022-09-25 13:34:20,superadmin,Logged in,rights: superadmin,No
+2022-09-25 14:21:31,superadmin,Logged in,rights: superadmin,No
+2022-09-25 14:21:47,superadmin,Session closed because the input contains SQL-like language,while adding new employee username: alterme,Yes
+2022-09-25 14:21:47,superadmin,Exit system,rights: superadmin,No
+2022-09-25 14:21:47,superadmin,Logged out,rights: superadmin,No
+2022-09-26 13:05:04,superadmin,Logged in,rights: superadmin,No
+2022-09-26 13:13:52,superadmin,Logged in,rights: 1,No
+2022-09-26 13:22:56,superadmin,Logged in,rights: 1,No
+2022-09-26 13:37:29,superadmin,Logged in,rights: 1,No
+2022-09-26 13:56:49,superadmin,Logged in,rights: 1,No
+2022-09-26 13:57:58,superadmin,Logged in,rights: 1,No
+2022-09-26 14:04:08,superadmin,Logged in,rights: 1,No
+2022-09-26 14:05:02,superadmin,Malicious input detected: field (city) at 'addmember',while adding new members city: sss,Yes
+2022-09-26 14:05:02,superadmin,Exit system,rights: 1,No
+2022-09-26 14:05:02,superadmin,Logged out,rights: 1,No
+2022-09-26 14:11:13,superadmin,Logged in,rights: 1,No
+2022-09-26 14:14:58,None,"Failed login, username: superadmin, attempt: 1",None,No
+2022-09-26 14:15:06,superadmin,Logged in,rights: 1,No
+2022-09-26 14:15:44,superadmin,Logged in,rights: 1,No
+2022-09-26 14:15:59,superadmin,Logged in,rights: 1,No
+2022-09-26 14:16:10,superadmin,Malicious input detected: field (zip_code) at 'addmember',while adding new members zipcode: alter,Yes
+2022-09-26 14:16:10,superadmin,Exit system,rights: 1,No
+2022-09-26 14:16:10,superadmin,Logged out,rights: 1,No
+2022-09-26 14:44:04,superadmin,Logged in,rights: 1,No
+2022-09-26 15:06:58,superadmin,Logged in,rights: 1,No
+2022-09-26 15:09:18,superadmin,Logged in,rights: 1,No
+2022-09-26 15:16:00,superadmin,Logged in,rights: 1,No
+2022-09-26 15:19:25,superadmin,Logged in,rights: 1,No
+2022-09-26 15:22:25,superadmin,Logged in,rights: 1,No
+2022-09-26 15:23:45,superadmin,Logged in,rights: 1,No
+2022-09-26 15:25:05,superadmin,Logged in,rights: 1,No
+2022-09-26 15:28:01,superadmin,Logged in,rights: 1,No
+2022-09-26 15:34:08,superadmin,Logged in,rights: 1,No
+2022-09-26 15:38:17,superadmin,Logged in,rights: 1,No
+2022-09-26 16:27:28,superadmin,Logged in,rights: 1,No
+2022-09-26 16:27:52,superadmin,Malicious input detected: field (zip_code) at 'addmember',while adding new members zipcode: alter,Yes
+2022-09-26 16:29:25,superadmin,Logged in,rights: 1,No
+2022-09-26 16:29:35,superadmin,Malicious input detected: field (zip_code) at 'addmember',while adding new members zipcode: alter,Yes
+2022-09-26 16:30:30,superadmin,Logged in,rights: 1,No
+2022-09-26 16:32:06,superadmin,Logged in,rights: 1,No
+2022-09-26 16:32:14,superadmin,Malicious input detected: field (zip_code) at 'addmember',while adding new members zipcode: alter,Yes
+2022-09-26 16:32:55,superadmin,Logged in,rights: 1,No
+2022-09-26 16:33:05,superadmin,Malicious input detected: field (zip_code) at 'addmember',while adding new members zipcode: alter,Yes
+2022-09-26 16:49:12,superadmin,Logged in,rights: 1,No
+2022-09-26 16:52:53,superadmin,Logged in,rights: 1,No
+2022-09-26 16:54:40,superadmin,Logged in,rights: 1,No
+2022-09-26 16:57:30,superadmin,Logged in,rights: 1,No
+2022-09-26 16:59:20,superadmin,Logged in,rights: 1,No
+2022-09-26 17:17:28,superadmin,Logged in,rights: 1,No
+2022-09-26 17:18:00,superadmin,Added member to the database," added member: 4044936561, Joeri H",No
+2022-09-26 17:41:52,superadmin,Logged in,rights: 1,No
+2022-09-26 17:42:08,superadmin,Logged in,rights: 1,No
+2022-09-26 17:43:33,None,"Failed login, username: superadmin, attempt: 1",None,No
+2022-09-26 17:43:40,superadmin,Logged in,rights: 1,No
+2022-09-26 17:45:11,superadmin,Change information member, search for member: s,Yes
+2022-09-26 18:13:02,superadmin,Logged in,rights: 1,No
+2022-09-26 18:22:55,None,"Failed login, username: superadmin, attempt: 1",None,No
+2022-09-26 18:23:07,None,"Failed login, username: superadmin, attempt: 2",None,No
+2022-09-26 18:23:30,superadmin,Logged in,rights: 1,No
+2022-09-26 18:24:56,superadmin,Logged in,rights: 1,No
+2022-09-26 18:41:41,superadmin,Logged in,rights: 1,No
+2022-09-26 18:42:38,superadmin,Logged in,rights: 1,No
+2022-09-26 18:45:53,superadmin,Logged in,rights: 1,No
+2022-09-26 18:46:04,superadmin,Change information member, search for member with wrong input: ,Yes
+2022-09-26 18:49:13,superadmin,Logged in,rights: 1,No
+2022-09-26 18:54:56,superadmin,Logged in,rights: 1,No
+2022-09-26 19:00:44,superadmin,Logged in,rights: 1,No
+2022-09-26 19:01:40,superadmin,Logged in,rights: 1,No
+2022-09-26 19:02:29,superadmin,Logged in,rights: 1,No
+2022-09-26 19:03:58,superadmin,Logged in,rights: 1,No
+2022-09-26 19:05:07,superadmin,Logged in,rights: 1,No
+2022-09-26 19:05:38,superadmin,Added member to the database," added member: 7103889781, Joeri Test",No
+2022-09-26 19:07:14,superadmin,Logged in,rights: 1,No
+2022-09-26 21:23:35,superadmin,Logged in,rights: 1,No
+2022-09-26 21:28:36,superadmin,Logged in,rights: 1,No
+2022-09-26 21:28:52,superadmin,Change information member, search for member with wrong input: bla,Yes
+2022-09-26 21:38:32,superadmin,Logged in,rights: 1,No
+2022-09-26 21:39:41,superadmin,Logged in,rights: 1,No
+2022-09-26 21:41:08,superadmin,Logged in,rights: 1,No
+2022-09-26 21:42:47,superadmin,Logged in,rights: 1,No
+2022-09-26 21:45:03,superadmin,Logged in,rights: 1,No
+2022-09-26 21:46:31,superadmin,Logged in,rights: 1,No
+2022-09-26 21:48:01,superadmin,Logged in,rights: 1,No
+2022-09-26 21:49:58,superadmin,Logged in,rights: 1,No
+2022-09-26 21:51:19,superadmin,Change information member, search for member with wrong input: bla,Yes
+2022-09-26 21:54:38,superadmin,Logged in,rights: 1,No
+2022-09-26 21:55:09,superadmin,Logged in,rights: 1,No
+2022-09-26 21:57:15,superadmin,Logged in,rights: 1,No
+2022-09-26 21:58:12,superadmin,Edited member id: 4044936561, edited member: Testing TestingTesting,No
+2022-09-26 21:59:24,superadmin,Logged in,rights: 1,No
+2022-09-27 10:37:31,superadmin,Logged in,rights: 1,No
+2022-09-27 14:27:26,superadmin,Logged in,rights: 1,No
+2022-09-27 14:28:30,superadmin,Logged in,rights: 1,No
+2022-09-27 14:29:45,superadmin,Logged in,rights: 1,No
+2022-09-27 14:31:38,superadmin,Logged in,rights: 1,No
+2022-09-27 14:32:14,superadmin,Logged in,rights: 1,No
+2022-09-27 14:33:07,superadmin,Edited member id: 7103889781, edited member: Joeri Huigsloot,No
+2022-09-27 14:34:07,None,"Failed login, username: superadmin, attempt: 1",None,No
+2022-09-27 14:34:14,superadmin,Logged in,rights: 1,No
+2022-09-27 14:37:15,superadmin,Logged in,rights: 1,No
+2022-09-27 14:39:14,superadmin,Logged in,rights: 1,No
+2022-09-27 14:41:05,superadmin,Logged in,rights: 1,No
+2022-09-27 14:41:09,superadmin,Change information member, search for member with wrong input: blabla,Yes
+2022-09-27 14:41:17,superadmin,Change information member, search for member with wrong input: select,Yes
+2022-09-27 14:46:36,superadmin,Logged in,rights: 1,No
+2022-09-27 14:46:41,superadmin,Change information member, search for member with wrong input: alter,Yes
+2022-09-27 14:53:26,superadmin,Logged in,rights: 1,No
+2022-09-27 14:54:58,superadmin,Change information member, search for member with wrong input: blabla,Yes
+2022-09-27 15:02:17,superadmin,Logged in,rights: 1,No
+2022-09-27 15:05:34,superadmin,Logged in,rights: 1,No
+2022-09-27 15:05:57,superadmin,Change information member, search for member with wrong input: blabla,Yes
+2022-09-27 15:06:05,superadmin,Malicious input detected: looking for membership_id,"try to editing members information, input alter",Yes
+2022-09-27 15:06:41,superadmin,Logged in,rights: 1,No
+2022-09-27 15:06:44,superadmin,Malicious input detected: looking for membership_id,"try to editing members information, input alter",Yes
+2022-09-27 15:07:06,superadmin,Logged in,rights: 1,No
+2022-09-27 15:07:10,superadmin,Malicious input detected: looking for membership_id,"try to editing members information, input select",Yes
+2022-09-27 15:07:44,superadmin,Logged in,rights: 1,No
+2022-09-27 15:07:55,superadmin,Malicious input detected: field (first_name) at function 'editmember', while adding editing members first name: alter,Yes
