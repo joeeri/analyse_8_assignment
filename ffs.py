@@ -1,5 +1,6 @@
 import sqlite3
 import sys
+from itertools import repeat
 from sqlite3 import Error
 import validator
 import logger
@@ -34,7 +35,7 @@ class FurnicorFamilySystem:
                            registration_date datetime default current_timestamp)''')
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS employees
                                        (id integer PRIMARY KEY AUTOINCREMENT, 
-                                       username text UNIQUE, password text, first_name text, last_name text,
+                                       username text UNIQUE, password text,
                                        registration_date datetime default current_timestamp, rights text)''')
         except Error as e:
             print(f"Cannot connect to the database, connection error: {e} \n Please check the error and try again")
@@ -272,7 +273,7 @@ class FurnicorFamilySystem:
                     print(res_last_name_check["message"])
                     return {"attack": True, "log": "Malicious input detected: field (last_name) "
                                                    "at function 'editmember'",
-                            "add_info": f" while adding editing members last name: {last_name}"}
+                            "add_info": f" while editing members last name: {last_name}"}
                 else:
                     res_last_name_check = self.validator.checkname(last_name)
                     if res_last_name_check["correct"]:
@@ -287,7 +288,7 @@ class FurnicorFamilySystem:
                     print(res_street_check["message"])
                     return {"attack": True, "log": "Malicious input detected: field (street) "
                                                    "at 'editmember'",
-                            "add_info": f"while adding editing members street: {street}"}
+                            "add_info": f"while editing members street: {street}"}
                 else:
                     res_street_check = self.validator.checkstreet(street)
                     if res_street_check["correct"]:
@@ -390,7 +391,6 @@ class FurnicorFamilySystem:
                 print(response["message"])
                 continue
             break
-
         while True:
             input_password = input("Password: ")
             res_input_password = self.validator.checkattack(input_password)
@@ -403,35 +403,44 @@ class FurnicorFamilySystem:
                 print(response["message"])
                 continue
             break
-        if employee_rights == "2" or employee_rights == "3":
-            input_firstname = input("First name: ")
-            res_first_name_check = self.validator.checkattack(input_firstname)
+        while True:
+            first_name = input("First name: ")  # First name
+            res_first_name_check = self.validator.checkattack(first_name)
             if not res_first_name_check["correct"]:
                 print(res_first_name_check["message"])
-                return {"attack": True, "log": ("Malicious input detected: field (first_name) "
-                                               "at function 'addemployee"),
-                        "add_info": f"while adding new employee first_name: {input_firstname}"}
-            input_lastname = input("Last name: ")
-            res_last_name_check = self.validator.checkattack(input_lastname)
+                return {"attack": True, "log": "Malicious input detected: field (first_name) "
+                                               "at function 'editmember'",
+                        "add_info": f" while adding editing members first name: {first_name}"}
+            else:
+                res_first_name_check = self.validator.checkname(first_name)
+                if res_first_name_check["correct"]:
+                    break
+                else:
+                    print(res_first_name_check["message"])
+                    continue
+        while True:
+            last_name = input("Last name: ")  # Last name
+            res_last_name_check = self.validator.checkattack(last_name)
             if not res_last_name_check["correct"]:
                 print(res_last_name_check["message"])
-                return {"attack": True, "log": ("Malicious input detected: field (last_name) "
-                                               "at function 'addemployee"),
-                        "add_info": f"while adding new employee first_name: {input_lastname}"}
-            hashed_username = self.validator.hash(input_username.lower())  # Hash username & password
-            hashed_password = self.validator.hash(input_password)  # before adding to the database
-            self.cursor.execute("INSERT INTO employees(username, password, rights, first_name, last_name) VALUES(?, ?, "
-                                "?, ?, ?)",
-                                (hashed_username, hashed_password, employee_rights, input_firstname, input_lastname))
-            self.connection.commit()
-        else:
-            hashed_username = self.validator.hash(input_username.lower())  # Hash username & password
-            hashed_password = self.validator.hash(input_password)  # before adding to the database
-            self.cursor.execute("INSERT INTO employees(username, password, rights) VALUES(?, ?, ?)",
-                                (hashed_username, hashed_password, employee_rights))
-            self.connection.commit()
-        print(f"--Employee successfully added with rights {employee_rights} --")
-        self.logger.log(self.user.username, "Added to the database", f" added employee: {input_username}", "No")
+                return {"attack": True, "log": "Malicious input detected: field (last_name) "
+                                               "at function 'editmember'",
+                        "add_info": f" while editing members last name: {last_name}"}
+            else:
+                res_last_name_check = self.validator.checkname(last_name)
+                if res_last_name_check["correct"]:
+                    break
+                else:
+                    print(res_last_name_check["message"])
+                    continue
+        hashed_username = self.validator.hash(input_username.lower())  # Hash username & password
+        hashed_password = self.validator.hash(input_password)  # before adding to the database
+        self.cursor.execute("INSERT INTO employees(username, password, first_name, last_name, rights) VALUES(?, ?, ?)",
+                            (hashed_username, hashed_password, first_name, last_name, employee_rights))
+        self.connection.commit()
+        print(f"--Employee successfully added with rights {employee_rights_name} --")
+        self.logger.log(self.user.username, "Added to the database", f" added employee: {input_username} "
+                                                                     f"with rights: {employee_rights_name}", "No")
         return {"attack": False}
 
     def editemployee(self, employee_id):
@@ -461,10 +470,39 @@ class FurnicorFamilySystem:
                 print(response["message"])
                 continue
             break
-
+        while True:
+            first_name = input("First name: ")  # First name
+            res_first_name_check = self.validator.checkattack(first_name)
+            if not res_first_name_check["correct"]:
+                print(res_first_name_check["message"])
+                return {"attack": True, "log": "Malicious input detected: field (first_name) "
+                                               "at function 'editmember'",
+                        "add_info": f" while adding editing members first name: {first_name}"}
+            else:
+                res_first_name_check = self.validator.checkname(first_name)
+                if res_first_name_check["correct"]:
+                    break
+                else:
+                    print(res_first_name_check["message"])
+                    continue
+        while True:
+            last_name = input("Last name: ")  # Last name
+            res_last_name_check = self.validator.checkattack(last_name)
+            if not res_last_name_check["correct"]:
+                print(res_last_name_check["message"])
+                return {"attack": True, "log": "Malicious input detected: field (last_name) "
+                                               "at function 'editmember'",
+                        "add_info": f" while editing members last name: {last_name}"}
+            else:
+                res_last_name_check = self.validator.checkname(last_name)
+                if res_last_name_check["correct"]:
+                    break
+                else:
+                    print(res_last_name_check["message"])
+                    continue
         while True:
             right = input(
-                f"Choose right by entering it's number (1 or 2): \n   {self.validator.rights}")  # Rights
+                f"Choose right by entering it's right (superadmin or advisor): \n   {self.validator.rights}")  # Rights
             res_right_check = self.validator.validateserver(right)  # If this input is not correct the
             if not res_right_check["correct"]:  # session will be stopped
                 print(res_right_check["message"])
@@ -472,36 +510,15 @@ class FurnicorFamilySystem:
                         "log": "Malicious input detected: field (right) at 'editemployee'",
                         "add_info": f"while editing employee's new right: {right}"}
             break
-
-        while True:
-            input_firstname = input("First name: ")
-            res_first_name_check = self.validator.checkattack(input_firstname)
-            if not res_first_name_check["correct"]:
-                print(res_first_name_check["message"])
-                return {"attack": True, "log": ("Malicious input detected: field (first_name) "
-                                                "at function 'editemployee"),
-                        "add_info": f"while editing employee's new first_name: {input_firstname}"}
-            break
-        while True:
-            input_lastname = input("Last name: ")
-            res_last_name_check = self.validator.checkattack(input_lastname)
-            if not res_last_name_check["correct"]:
-                print(res_last_name_check["message"])
-                return {"attack": True, "log": ("Malicious input detected: field (last_name) "
-                                                "at function 'editemployee"),
-                        "add_info": f"while editing employee's new first_name: {input_lastname}"}
-            break
-
         hashed_username = self.validator.hash(input_username.lower())  # Hash username & password
         hashed_password = self.validator.hash(input_password)  # before adding to the database
         self.cursor.execute(
-                        "UPDATE employees set username=?, password=?, rights=?, first_name=?, last_name=? WHERE id=?;",
-            (hashed_username, hashed_password, self.validator.rights[right], input_firstname, input_lastname, employee_id))
+                        "UPDATE employees set username=?, password=?, , first_name=?, last_name=?, rights=?, WHERE id=?;",
+            (hashed_username, hashed_password, first_name, last_name, self.validator.rights[right], employee_id))
         self.connection.commit()
-        print(f"\n--Employee {input_username} successfully edited --")
+        print(f"\n--Employee {input_username} successfully edited by {self.user.username}--")
         self.logger.log(self.user.username, "Edited employee", f" edited employee: {input_username}", "No")
         return {"attack": False}
-
 
     def menu(self):
         user_in_menu = True
@@ -555,8 +572,8 @@ class FurnicorFamilySystem:
                     for x in listmembers:
                         print("Membership id:", x[0], "Name:", x[1] ,x[2])
                         showmembers.append(x[0])
-                    choosemember = input(f" \n{showmembers} \n"
-                                         f"Type the membership id from aboves information of the user who's information needs to be changed: ")
+                    choosemember = input(f" \n Membership id's {showmembers} \n"
+                                         "Type the membership id from aboves information of the user who's information needs to be changed: ")
                     try:
                         int(choosemember)
                         res_name_check = self.validator.validatelist(showmembers,
@@ -564,7 +581,7 @@ class FurnicorFamilySystem:
                         if not res_name_check["correct"]:  # session will be stopped
                             print(res_name_check["message"])
                             return {"attack": True,
-                                    "log": "Malicious input detected: field (membership_id) at 'edit information from employee'",
+                                    "log": "Malicious input detected: field (membership_id) at 'edit information from member'",
                                     "add_info": f"while looking up membership_id: {choosemember}"}
                     except ValueError:
                         res_name_string_check = self.validator.checkattack(choosemember)
@@ -586,18 +603,38 @@ class FurnicorFamilySystem:
                         self.forceexit()
                         break
                 elif option == "7":
+                    print("List of members: ")
                     getmembers = self.cursor.execute("SELECT membership_id, first_name, last_name FROM members")
                     listmembers = getmembers.fetchall()
+                    showmembers = list()
                     for x in listmembers:
-                        print("ID:", x[0], "Name:", x[1], x[2])
-                    choosemember = input("Type the membership id of the member who needs to be deleted: ")
+                        print("Membership id:", x[0], "Name:", x[1], x[2])
+                        showmembers.append(x[0])
+                    choosemember = input(f" \nMembership id's {showmembers} \n"
+                                         "Type the membership id of the member who needs to be deleted: ")
                     try:
                         int(choosemember)
+                        res_name_check = self.validator.validatelist(showmembers,
+                                                                     int(choosemember))  # If this input is not correct the
+                        if not res_name_check["correct"]:  # session will be stopped
+                            print(res_name_check["message"])
+                            return {"attack": True,
+                                    "log": "Malicious input detected: field (membership_id) at 'delete member'",
+                                    "add_info": f"while looking up membership_id: {choosemember}"}
                     except ValueError:
-                        self.logger.log(self.user.username, "Delete member",
-                                        f" search for deletion member: {choosemember}", "Yes")
-                        print("\nThat's not an id, please try again")
-                        continue
+                        res_name_string_check = self.validator.checkattack(choosemember)
+                        if not res_name_string_check["correct"]:
+                            print(res_name_string_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for membership_id",
+                                            f"try to delete member, input: {choosemember}", "Yes")
+                            self.forceexit()
+                            break
+                        else:
+                            self.logger.log(self.user.username, "Delete member",
+                                            f" search for member with wrong input: {choosemember}", "Yes")
+                            print("\nThat's not an id, please try again")
+                            continue
                     res = self.deletemember(choosemember)
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
@@ -605,19 +642,38 @@ class FurnicorFamilySystem:
                         break
                 elif option == "8":
                     getemployees = self.cursor.execute("SELECT id, username, first_name, last_name, rights FROM employees "
-                                                       "WHERE rights = 'systemadmin' OR rights = 'advisor'")
+                                                       "WHERE rights = '2' OR rights = '3'")
                     listemployees = getemployees.fetchall()
+                    showemployees = list()
                     for x in listemployees:
-                        print("ID:", x[0], "Username:", self.validator.unhash(x[1]),
-                              f"Name: {x[2]} {x[3]}", "Right:", x[4])
-                    chooseemployee = input("Type the id of the employee who's information needs to be changed: ")
+                        print("Employee id:", x[0], "Username:", self.validator.unhash(x[1]),
+                              f"Name: {x[2]} {x[3]}", "systemadmin" if x[4] == "2" else "advisor")
+                        showemployees.append(x[0])
+                    chooseemployee = input(f" \nEmployee id's {showemployees} \n"
+                        "Type the id of the employee who's information needs to be changed: ")
                     try:
                         int(chooseemployee)
+                        res_name_check = self.validator.validatelist(showemployees,
+                                                                     int(chooseemployee))  # If this input is not correct the
+                        if not res_name_check["correct"]:  # session will be stopped
+                            print(res_name_check["message"])
+                            return {"attack": True,
+                                    "log": "Malicious input detected: field (membership_id) at 'delete member'",
+                                    "add_info": f"while looking up membership_id: {chooseemployee}"}
                     except ValueError:
-                        self.logger.log(self.user.username, "Edit employee",
-                                        f" search for editing employee: {chooseemployee}", "Yes")
-                        print("\nThat's not an id, please try again")
-                        continue
+                        res_name_string_check = self.validator.checkattack(chooseemployee)
+                        if not res_name_string_check["correct"]:
+                            print(res_name_string_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for employee_id",
+                                            f"try to edit employee, input: {chooseemployee}", "Yes")
+                            self.forceexit()
+                            break
+                        else:
+                            self.logger.log(self.user.username, "Edit employee",
+                                            f" search for employee with wrong input: {chooseemployee}", "Yes")
+                            print("\nThat's not an id, please try again")
+                            continue
                     res = self.editemployee(chooseemployee)
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
@@ -625,19 +681,36 @@ class FurnicorFamilySystem:
                         break
                 elif option == "9":
                     getemployees = self.cursor.execute("SELECT id, username, first_name, last_name, rights FROM employees "
-                                                       "WHERE rights = 'systemadmin' OR rights = 'advisor'")
+                                                       "WHERE rights = '2' OR rights = '3'")
                     listemployees = getemployees.fetchall()
                     print("Employees:")
                     for x in listemployees:
-                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {x[2]} {x[3]}, Right: {x[4]}")
-                    chooseemployee = input("Type the ID of the employee who's needs to be deleted: ")
+                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {x[2]} {x[3]} ",
+                              "systemadmin" if x[4] == "2" else "advisor")
+                    chooseemployee = input("Type the ID of the employee who needs to be deleted: ")
                     try:
-                        int(chooseemployee)
+                        res_name_string_check = self.validator.checkattack(chooseemployee)
+                        if not res_name_string_check["correct"]:
+                            print(res_name_string_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for employee_id",
+                                            f"try to delete member, input: {chooseemployee}", "Yes")
+                            self.forceexit()
+                            break
                     except ValueError:
-                        self.logger.log(self.user.username, "Delete employee",
-                                        f" search for deleting employee: {chooseemployee}", "Yes")
-                        print("\nThat's not an id, please try again")
-                        continue
+                        res_name_string_check = self.validator.checkattack(chooseemployee)
+                        if not res_name_string_check["correct"]:
+                            print(res_name_string_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for employee_id",
+                                            f"try to delete employee, input: {chooseemployee}", "Yes")
+                            self.forceexit()
+                            break
+                        else:
+                            self.logger.log(self.user.username, "Delete employee",
+                                            f" search for employee with wrong input: {chooseemployee}", "Yes")
+                            print("\nThat's not an id, please try again")
+                            continue
                     res = self.deleteemployee(chooseemployee)
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")

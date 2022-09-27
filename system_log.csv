@@ -181,3 +181,40 @@
 2022-09-27 15:07:10,superadmin,Malicious input detected: looking for membership_id,"try to editing members information, input select",Yes
 2022-09-27 15:07:44,superadmin,Logged in,rights: 1,No
 2022-09-27 15:07:55,superadmin,Malicious input detected: field (first_name) at function 'editmember', while adding editing members first name: alter,Yes
+2022-09-27 15:55:56,superadmin,Logged in,rights: 1,No
+2022-09-27 15:56:29,superadmin,Delete member, search for member with wrong input: string,Yes
+2022-09-27 15:56:49,superadmin,Deleted from database,member 4044936561 deleted,No
+2022-09-27 15:59:31,superadmin,Logged in,rights: 1,No
+2022-09-27 16:03:08,superadmin,Logged in,rights: 1,No
+2022-09-27 16:06:56,superadmin,Logged in,rights: 1,No
+2022-09-27 16:07:25,superadmin,Added to the database, added employee: joeritest,No
+2022-09-27 16:18:17,superadmin,Logged in,rights: 1,No
+2022-09-27 16:19:08,superadmin,Added to the database, added employee: joeri7,No
+2022-09-27 16:20:19,superadmin,Logged in,rights: 1,No
+2022-09-27 16:20:44,superadmin,Logged in,rights: 1,No
+2022-09-27 16:21:00,superadmin,Added to the database, added employee: joeritest2,No
+2022-09-27 16:25:53,superadmin,Logged in,rights: 1,No
+2022-09-27 16:26:06,superadmin,Added to the database, added employee: joerihui,No
+2022-09-27 16:26:57,superadmin,Logged in,rights: 1,No
+2022-09-27 16:33:02,superadmin,Logged in,rights: 1,No
+2022-09-27 16:33:14,superadmin,Added to the database, added employee: blajoeri,No
+2022-09-27 16:35:45,None,"Failed login, username: sexyjoeri, attempt: 1",None,No
+2022-09-27 16:35:54,superadmin,Logged in,rights: 1,No
+2022-09-27 16:36:09,superadmin,Added to the database, added employee: sexyjoeri,No
+2022-09-27 17:12:29,superadmin,Logged in,rights: 1,No
+2022-09-27 17:14:00,superadmin,Edit employee, search for employee with wrong input: pop,Yes
+2022-09-27 17:24:12,superadmin,Logged in,rights: 1,No
+2022-09-27 17:24:22,superadmin,Deleted from database,employee 19 deleted,No
+2022-09-27 17:24:28,superadmin,Deleted from database,employee 9 deleted,No
+2022-09-27 17:25:15,superadmin,Deleted from database,employee 10 deleted,No
+2022-09-27 17:25:21,superadmin,Delete employee, search for deleting employee: bla,Yes
+2022-09-27 17:25:29,superadmin,Delete employee, search for deleting employee: blaselect,Yes
+2022-09-27 17:25:36,superadmin,Delete employee, search for deleting employee: select,Yes
+2022-09-27 17:27:05,superadmin,Delete employee, search for deleting employee: alter,Yes
+2022-09-27 17:29:47,superadmin,Logged in,rights: 1,No
+2022-09-27 17:29:52,superadmin,Malicious input detected: looking for employee_id,"try to delete member, input: select",Yes
+2022-09-27 17:30:28,superadmin,Logged in,rights: 1,No
+2022-09-27 17:30:39,superadmin,Malicious input detected: looking for employee_id,"try to edit employee, input: select",Yes
+2022-09-27 17:30:57,superadmin,Logged in,rights: 1,No
+2022-09-27 17:40:11,superadmin,Logged in,rights: 1,No
+2022-09-27 17:41:14,superadmin,Logged in,rights: 1,No

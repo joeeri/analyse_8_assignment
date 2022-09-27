@@ -16,7 +16,7 @@ class Validator:
         self.mobile = regex.compile("^\+[0-9]{8}$")
         self.cities = {"1": "Rotterdam", "2": "Den Haag", "3": "Amsterdam", "4": "Leiden", "5": "Utrecht",
                           "6": "Arnhem", "7": "Nijmegen", "8": "Enschede", "9": "Groningen", "10": "Leeuwaarden"}
-        self.rights = {"1": "systemadmin", "2": "advisor"}
+        self.rights = {"systemadmin": 2, "adivsor": 3}
         self.red_flags_sql_injection = ["alter", "begin", "break", "commit", "create", "cursor", "drop", "select" ,"insert", "update",
                             "while", ";", "--"]
         self.hash_number = 2
