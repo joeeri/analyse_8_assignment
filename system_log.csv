@@ -218,3 +218,30 @@
 2022-09-27 17:30:57,superadmin,Logged in,rights: 1,No
 2022-09-27 17:40:11,superadmin,Logged in,rights: 1,No
 2022-09-27 17:41:14,superadmin,Logged in,rights: 1,No
+2022-09-27 17:48:47,superadmin,Logged in,rights: 1,No
+2022-09-27 17:48:52,superadmin,Deleted from database,employee 12 deleted,No
+2022-09-27 17:51:35,superadmin,Logged in,rights: 1,No
+2022-09-27 17:51:38,superadmin,Malicious input detected: looking for employee_id,"try to delete member, input: 12",Yes
+2022-09-27 17:53:35,superadmin,Logged in,rights: 1,No
+2022-09-27 17:53:37,superadmin,Malicious input detected: looking for employee_id,"try to delete member, input: 12",Yes
+2022-09-27 17:53:37,superadmin,Deleted from database,employee 12 deleted,No
+2022-09-27 17:54:48,superadmin,Logged in,rights: 1,No
+2022-09-27 17:54:51,superadmin,Malicious input detected: looking for employee_id,"try to delete member, input: 12",Yes
+2022-09-27 17:55:07,superadmin,Deleted from database,employee 11 deleted,No
+2022-09-27 17:55:21,superadmin,Malicious input detected: looking for employee_id,"try to delete member, input: 25",Yes
+2022-09-27 17:55:36,superadmin,Delete employee, search for employee with wrong input: bladiebla9,Yes
+2022-09-27 17:58:06,superadmin,Logged in,rights: 1,No
+2022-09-27 17:58:11,superadmin,Change information member, search for member with wrong input: ,Yes
+2022-09-27 17:58:44,superadmin,Malicious input detected: field (right) at 'editemployee',while editing employee's new right: systemadmin,Yes
+2022-09-27 18:01:59,superadmin,Logged in,rights: 1,No
+2022-09-27 18:05:00,superadmin,Logged in,rights: 1,No
+2022-09-27 18:06:42,superadmin,Malicious input detected: field (right) at 'editemployee',while editing employee's new right: systemadmin,Yes
+2022-09-27 18:08:09,superadmin,Logged in,rights: 1,No
+2022-09-27 18:08:29,superadmin,"
+Session closed because the input contains SQL-like language",while editing employee's new password: grevre.\';,Yes
+2022-09-27 18:08:41,superadmin,Logged in,rights: 1,No
+2022-09-27 18:08:55,superadmin,Malicious input detected: looking for employee_id,"try to edit member, input: 9",Yes
+2022-09-27 18:09:39,superadmin,Malicious input detected: field (right) at 'editemployee',while editing employee's new right: advisor,Yes
+2022-09-27 18:10:08,superadmin,Logged in,rights: 1,No
+2022-09-27 18:11:43,superadmin,Logged in,rights: 1,No
+2022-09-27 18:12:10,superadmin,Edited employee, edited employee: joeritest3,No
