@@ -134,7 +134,7 @@ class FurnicorFamilySystem:
                 res_street_check = self.validator.checkattack(street)
                 if not res_street_check["correct"]:
                     print(res_street_check["message"])
-                    return {"attack": True, "log": "Malicious input detected: field (street) "
+                    return {"attack": True, "log": "Malicious input detected: field (street)"
                                                    "at 'addmember'",
                             "add_info": f"while adding new members street: {street}"}
                 else:
@@ -178,7 +178,7 @@ class FurnicorFamilySystem:
 
             while True:
                 city = input(
-                    f"{self.validator.cities} \n Choose city by entering it's number (1 - 10): ")  # Stad
+                    f"{self.validator.cities}  \nChoose city by entering it's number (1 - 10): ")  # Stad
                 res_city_check = self.validator.validateserver(city)  # If this input is not correct the
                 if not res_city_check["correct"]:  # session will be stopped
                     print(res_city_check["message"])
@@ -205,7 +205,7 @@ class FurnicorFamilySystem:
 
             while True:
                 landcode = "+31-6-"
-                phonenumber = input("Phone number (mobile_phone) [+31-6-XXXXXXXX]: ")  # Phonenumber
+                phonenumber = input("Phone number (mobile_phone) +31-6-[XXXXXXXX]: ")  # Phonenumber
                 res_mobile_phone = self.validator.checkattack(phonenumber)
                 if not res_mobile_phone["correct"]:
                     print(res_mobile_phone["message"])
@@ -350,7 +350,7 @@ class FurnicorFamilySystem:
                         continue
             while True:
                 landcode = "+31-6-"
-                phonenumber = input("Phone number (mobile_phone) [+31-6-XXXXXXXX]: ")  # Phonenumber
+                phonenumber = input("Phone number (mobile_phone) +31-6-[XXXXXXXX]: ")  # Phonenumber
                 res_mobile_phone = self.validator.checkattack(phonenumber)
                 if not res_mobile_phone["correct"]:
                     print(res_mobile_phone["message"])
@@ -433,10 +433,10 @@ class FurnicorFamilySystem:
                     continue
         hashed_username = self.validator.hash(input_username.lower())  # Hash username & password
         hashed_password = self.validator.hash(input_password)  # before adding to the database
-        self.cursor.execute("INSERT INTO employees(username, password, first_name, last_name, rights) VALUES(?, ?, ?)",
+        self.cursor.execute("INSERT INTO employees(username, password, first_name, last_name, rights) VALUES(?, ?, ?, ?, ?)",
                             (hashed_username, hashed_password, first_name, last_name, employee_rights))
         self.connection.commit()
-        print(f"--Employee successfully added with rights {employee_rights_name} --")
+        print(f"--Employee {input_username} successfully added with rights {employee_rights_name}--")
         self.logger.log(self.user.username, "Added to the database", f" added employee: {input_username} "
                                                                      f"with rights: {employee_rights_name}", "No")
         return {"attack": False}
@@ -539,31 +539,32 @@ class FurnicorFamilySystem:
                     "13: Log out\n"
                     "14: Exit")
                 option = input("Choose option with 1 and 14. Just type the number and hit enter: ")
+                self.logger.log(self.user.username, "Choose option", f"option: {option}", "No")
                 if option == "1":
-                    res = self.addemployee(2, "systemadmin")
+                    res = self.addemployee(2, "systemadmin") # Add a new system administrator
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
                         self.forceexit()
                         break
                 elif option == "2":
-                    res = self.addmember()
+                    res = self.addmember() # Add a new member
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
                         self.forceexit()
                         break
                 elif option == "3":
-                    res = self.addemployee(3, "advisor")
+                    res = self.addemployee(3, "advisor") # Add a new advisor
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
                         self.forceexit()
                         break
                 elif option == "4":
-                    self.logger.getlogs()
+                    self.logger.getlogs() # Request systemlog
                     self.logger.log(self.user.username, "Get logs", "None", "No")
-                elif option == "5":
-                    self.createbackup()
+                elif option == "5": #
+                    self.createbackup()  # Create backup
                 elif option == "6":
-                    print("List of members:")
+                    print("List of members:") # Edit information from a member
                     getmembers = self.cursor.execute("SELECT membership_id, first_name, last_name FROM members")
                     listmembers = getmembers.fetchall()
                     showmembers = list()
@@ -571,7 +572,7 @@ class FurnicorFamilySystem:
                         print("Membership id:", x[0], "Name:", x[1] ,x[2])
                         showmembers.append(x[0])
                     choosemember = input(f" \n Membership id's {showmembers} \n"
-                                         "Type the membership id from aboves information of the user who's information needs to be changed: ")
+                                         "Type the membership id from aboves list of the user who's information needs to be changed: ")
                     try:
                         int(choosemember)
                         res_name_check = self.validator.validatelist(showmembers,
@@ -602,7 +603,7 @@ class FurnicorFamilySystem:
                         self.forceexit()
                         break
                 elif option == "7":
-                    print("List of members: ")
+                    print("List of members: ") # Delete a member
                     getmembers = self.cursor.execute("SELECT membership_id, first_name, last_name FROM members")
                     listmembers = getmembers.fetchall()
                     showmembers = list()
@@ -639,6 +640,7 @@ class FurnicorFamilySystem:
                         self.forceexit()
                         break
                 elif option == "8":
+                    # Edit information from a employee (systemadmin or advisor)
                     getemployees = self.cursor.execute("SELECT id, username, first_name, last_name, rights FROM employees "
                                                        "WHERE rights = '2' OR rights = '3'")
                     listemployees = getemployees.fetchall()
@@ -677,6 +679,7 @@ class FurnicorFamilySystem:
                         self.forceexit()
                         break
                 elif option == "9":
+                    # Delete an employee
                     getemployees = self.cursor.execute("SELECT id, username, first_name, last_name, rights FROM employees "
                                                        "WHERE rights = '2' OR rights = '3'")
                     listemployees = getemployees.fetchall()
@@ -717,6 +720,7 @@ class FurnicorFamilySystem:
                         self.exit()
                         break
                 elif option == "10":
+                    # Update password from an employee
                     getemployees = self.cursor.execute("SELECT id, username, first_name, last_name, rights FROM employees "
                                                        "WHERE rights = '2' OR rights = '3'")
                     listemployees = getemployees.fetchall()
@@ -800,6 +804,7 @@ class FurnicorFamilySystem:
                     "13: Log out\n"
                     "14: Exit")
                 option = input("Choose option with 1 and 14. Just type the number and hit enter: ")
+                self.logger.log(self.user.username, "Choose option", f"option: {option}", "No")
                 if option == "1":
                     res = self.addmember() # Add a new member
                     if res["attack"]:
@@ -825,7 +830,7 @@ class FurnicorFamilySystem:
                         print("Membership id:", x[0], "Name:", x[1], x[2])
                         showmembers.append(x[0])
                     choosemember = input(f" \n Membership id's {showmembers} \n"
-                                         "Type the membership id from aboves information of the user who's information needs to be changed: ")
+                                         "Type the membership id from aboves list of the user who's information needs to be changed: ")
                     try:
                         int(choosemember)
                         res_name_check = self.validator.validatelist(showmembers,
@@ -1059,6 +1064,7 @@ class FurnicorFamilySystem:
                       "5: Log out\n"
                       "6: Exit")
                 option = input("Choose option from 1 to 6. Just type the number and hit enter: ")
+                self.logger.log(self.user.username, "Choose option", f"option: {option}", "No")
                 if option == "1":
                     res = self.addmember() # Add a new  member
                     if res["attack"]:
