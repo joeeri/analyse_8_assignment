@@ -25,18 +25,17 @@ class FurnicorFamilySystem:
         try:
             self.connection = sqlite3.connect("family.db")
             self.cursor = self.connection.cursor()
-            # print("--Successfully connected to the database!--\n")
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS members
                            (id integer PRIMARY KEY AUTOINCREMENT, membership_id integer UNIQUE, first_name text,
                            last_name text, street text, housenumber text, zipcode text, 
-                           city text, email text UNIQUE, phone text, 
+                           city text, email text, phone text, 
                            registration_date datetime default current_timestamp)''')
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS employees
                                        (id integer PRIMARY KEY AUTOINCREMENT, 
                                        username text UNIQUE, password text,
                                        registration_date datetime default current_timestamp, rights text)''')
         except Error as e:
-            print(f"Cannot connect to the database, connection error: {e} \n Please check the error and try again")
+            print(f"--Cannot connect to the database, connection error: {e} \n Please check the error and try again--")
 
     def startloop(self):
         while self.insystem:
@@ -50,33 +49,33 @@ class FurnicorFamilySystem:
         attemps_left = 4 # five attemps
         while not self.logged_in:
             input_username = self.validator.hash(input("Username: ").lower())
-            input_password = self.validator.hash(getpass( 'Password: ' ))
+            input_password = self.validator.hash(getpass('Password: '))
             self.cursor.execute("SELECT * FROM employees WHERE username = ? AND password = ?",
                                 (input_username, input_password))  # Prevent SQL Injection by using prepared statements
             res_of_user = self.cursor.fetchall()
             if attemps_left == 0:
                 self.logger.log("None", "Session is stopped after five wrong login attemps",
                                 f"username: {self.validator.unhash(input_username)}", "Yes")
-                print("\n-Too many login attemps: session stopped, please try again later-\n")
+                print("\n--Too many login attemps: session stopped, please try again later--\n")
                 self.forceexit()
                 break
             if len(res_of_user) > 0:
                 self.user = User(res_of_user[0][0], self.validator.unhash(res_of_user[0][1]),
                                  res_of_user[0][6])
                 self.logged_in = True
-                print("--Login successfully--\n")
-                print(f"\n- Welcome to the system {self.user.username}!")
+                print("\n--Login successfully--\n")
+                print(f"\n--Welcome to the system {self.user.username}!--")
                 self.logger.log(self.user.username, "Logged in", f"rights: {self.user.rights}", "No")
             else:
                 attemps_left -= 1
                 attemps = attemps + 1
-                print("Username and password combination doesn't exists, please try again")
+                print("\n--Username and password combination doesn't exists, please try again--\n")
                 self.logger.log("None", f"Failed login, username: {self.validator.unhash(input_username)}, attempt: {attemps}",
                                 "None", "No")
 
     def logout(self):
         self.logger.log(self.user.username, "Logged out", f"rights: {self.user.rights}", "No")
-        print("--Sucessfull logged out--")
+        print("\n--Sucessfull logged out--\n")
         self.logged_in = False
         self.user = None
 
@@ -97,7 +96,7 @@ class FurnicorFamilySystem:
         first_name = last_name = street = housenumber = zip_code = city = email = mobile_phone = membership_id = ""
         adding_member = True
         while adding_member:
-            print("\n--Add information to member--")
+            print("\n--Add information to member--\n")
             while True:
                 first_name = input("First name: ")  # First name
                 res_first_name_check = self.validator.checkattack(first_name)
@@ -241,14 +240,14 @@ class FurnicorFamilySystem:
         self.connection.commit()
         self.logger.log(self.user.username, "Added member to the database",
                         f" added member: {membership_id}, {first_name} {last_name}", "No")
-        print(f"\n--Member {first_name} {last_name} with id: {membership_id}, successfully added to the system--")
+        print(f"\n--Member {first_name} {last_name} with id: {membership_id}, successfully added to the system!--")
         return {"attack": False}
 
     def editmember(self, member_id):
         first_name = last_name = street = housenumber = zip_code = city = email = mobile_phone = ""
         edit_member = True
         while edit_member:
-            print(f"\n--Edit information from member_id: {member_id}--")
+            print(f"\n--Edit information from member_id: {member_id}--\n")
             while True:
                 first_name = input("First name: ")  # First name
                 res_first_name_check = self.validator.checkattack(first_name)
@@ -372,11 +371,11 @@ class FurnicorFamilySystem:
         self.connection.commit()
         self.logger.log(self.user.username, f"Edited member id: {member_id}",
                         f" edited member: {first_name} {last_name}", "No")
-        print(f"--Member: {member_id}, {first_name} {last_name} successfully edited--")
+        print(f"\n--Member: {member_id}, {first_name} {last_name} successfully edited--\n")
         return {"attack": False}
 
     def addemployee(self, employee_rights, employee_rights_name):  # Inputs are checked because it's connected to the database
-        print(f"Registering new {employee_rights_name}")
+        print(f"--Registering new {employee_rights_name}--\n")
         while True:
             input_username = input("Username: ")
             res_input_username = self.validator.checkattack(input_username)
@@ -436,13 +435,13 @@ class FurnicorFamilySystem:
         self.cursor.execute("INSERT INTO employees(username, password, first_name, last_name, rights) VALUES(?, ?, ?, ?, ?)",
                             (hashed_username, hashed_password, first_name, last_name, employee_rights))
         self.connection.commit()
-        print(f"--Employee {input_username} successfully added with rights {employee_rights_name}--")
+        print(f"\n--Employee {input_username} successfully added with rights {employee_rights_name}--\n")
         self.logger.log(self.user.username, "Added to the database", f" added employee: {input_username} "
                                                                      f"with rights: {employee_rights_name}", "No")
         return {"attack": False}
 
     def editemployee(self, employee_id):
-        print(f"Editing employee: {employee_id}")
+        print(f"\n--Editing employee: {employee_id}--\n")
         while True:
             input_username = input("Username: ")
             res_input_username = self.validator.checkattack(input_username)
@@ -514,7 +513,7 @@ class FurnicorFamilySystem:
                         "UPDATE employees set username=?, password=?, first_name=?, last_name=?, rights=? WHERE id=?;",
             (hashed_username, hashed_password, first_name, last_name, self.validator.rights[right], employee_id))
         self.connection.commit()
-        print(f"\n--Employee {input_username} successfully edited by {self.user.username}--")
+        print(f"\n--Employee {input_username} successfully edited by {self.user.username}--\n")
         self.logger.log(self.user.username, "Edited employee", f" edited employee: {input_username}", "No")
         return {"attack": False}
 
@@ -538,7 +537,7 @@ class FurnicorFamilySystem:
                     "12: Search member\n"
                     "13: Log out\n"
                     "14: Exit")
-                option = input("Choose option with 1 and 14. Just type the number and hit enter: ")
+                option = input("Choose option from 1 to 14. Just type the number and hit enter: ")
                 self.logger.log(self.user.username, "Choose option", f"option: {option}", "No")
                 if option == "1":
                     res = self.addemployee(2, "systemadmin") # Add a new system administrator
@@ -789,6 +788,7 @@ class FurnicorFamilySystem:
 
             elif self.user.rights == "2": #systemadmin
                 print(
+                    "\n--OPTIONS--\n"
                     "1: Add a new member\n"
                     "2: Add a new advisor\n"
                     "3: Request systemlog\n"
@@ -803,7 +803,7 @@ class FurnicorFamilySystem:
                     "12: Search member\n"
                     "13: Log out\n"
                     "14: Exit")
-                option = input("Choose option with 1 and 14. Just type the number and hit enter: ")
+                option = input("Choose option from 1 to 14. Just type the number and hit enter: ")
                 self.logger.log(self.user.username, "Choose option", f"option: {option}", "No")
                 if option == "1":
                     res = self.addmember() # Add a new member
@@ -1052,7 +1052,7 @@ class FurnicorFamilySystem:
                         self.forceexit()
                         break
                     else:
-                        print("Option does not exists. Please choose again with an integer 1 to 14")
+                        print("\nOption does not exists. Please choose again with an integer 1 to 14")
                     continue
 
             elif self.user.rights == "3": #advisor
@@ -1138,7 +1138,7 @@ class FurnicorFamilySystem:
                         self.forceexit()
                         break
                     else:
-                        print("Option does not exists. Please choose again with an integer 1 to 6")
+                        print("\nOption does not exists. Please choose again with an integer 1 to 6")
                     continue
 
     def createbackup(self):  # Creates backup of db by putting it into a new instance + zips both the log file and the backup.db together
@@ -1172,7 +1172,7 @@ class FurnicorFamilySystem:
         self.cursor.execute(f'''DELETE FROM members WHERE membership_id = {membership_id}''')
         self.connection.commit()
         self.logger.log(self.user.username, "Deleted from database", f"member {membership_id} deleted", "No")
-        print(f"Succesfully deleted member: {membership_id}")
+        print(f"\n--Succesfully deleted member: {membership_id}--\n")
         return {"attack": False}
 
     def deleteemployee(self, employee_id):
@@ -1185,7 +1185,7 @@ class FurnicorFamilySystem:
         self.cursor.execute(f'''DELETE FROM employees WHERE id = {employee_id}''')
         self.connection.commit()
         self.logger.log(self.user.username, "Deleted from database", f"employee {employee_id} deleted", "No")
-        print(f"Succesfully deleted employee: {employee_id}")
+        print(f"\n--Succesfully deleted employee: {employee_id}--\n")
         return {"attack": False}
 
     def update_own_password(self):
@@ -1236,7 +1236,7 @@ class FurnicorFamilySystem:
         list_employees = self.cursor.execute("SELECT id, username, rights FROM employees")
         hashed_employees = list_employees.fetchall()
         for x in hashed_employees:
-            print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Right: ",
+            print(f"ID: {x[0]}, \t Username: {self.validator.unhash(x[1])}, \t Right: ",
                   "systemadmin" if x[2] == "2" else "advisor")
         self.logger.log(self.user.username, "List employees with rights",
                         f" all employees with rights", "No")

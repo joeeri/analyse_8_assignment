@@ -347,3 +347,61 @@ Session closed because the input contains SQL-like language",while looking for m
 2022-10-02 17:41:50,superadmin,Choose option,option: 3,No
 2022-10-02 17:42:22,superadmin,Logged in,rights: 1,No
 2022-10-02 17:42:24,superadmin,Choose option,option: 3,No
+2022-10-02 17:48:51,joeri1995,Logged in,rights: 3,No
+2022-10-02 17:48:56,joeri1995,Choose option,option: 4,No
+2022-10-02 17:49:02,joeri1995,Searched members, input search command: joeri at function: searchmember,No
+2022-10-02 17:49:16,joeri1995,Choose option,option: 1,No
+2022-10-02 17:50:13,joeri1995,Added member to the database," added member: 3603340526, Stefan deVries",No
+2022-10-02 17:50:25,joeri1995,Choose option,option: 3,No
+2022-10-02 17:50:34,joeri1995,Updated own password, updated password user id: 14,No
+2022-10-02 17:50:41,joeri1995,Choose option,option: 5,No
+2022-10-02 17:50:41,joeri1995,Logged out,rights: 3,No
+2022-10-02 17:50:50,joeri1995,Logged in,rights: 3,No
+2022-10-02 17:50:53,joeri1995,Choose option,option: 3,No
+2022-10-02 17:51:00,joeri1995,Updated own password, updated password user id: 14,No
+2022-10-02 17:51:02,joeri1995,Choose option,option: 6,No
+2022-10-02 17:51:02,joeri1995,Exit system,rights: 3,No
+2022-10-02 17:51:02,joeri1995,Logged out,rights: 3,No
+2022-10-02 17:52:19,superadmin,Logged in,rights: 1,No
+2022-10-02 17:52:22,superadmin,Choose option,option: 1,No
+2022-10-02 17:52:37,superadmin,Added to the database, added employee: joerih1995 with rights: systemadmin,No
+2022-10-02 17:52:42,superadmin,Choose option,option: 13,No
+2022-10-02 17:52:42,superadmin,Logged out,rights: 1,No
+2022-10-02 17:52:52,joerih1995,Logged in,rights: 2,No
+2022-10-02 17:52:58,joerih1995,Choose option,option: 1,No
+2022-10-02 17:56:57,joerih1995,Logged in,rights: 2,No
+2022-10-02 17:57:04,joerih1995,Choose option,option: 1,No
+2022-10-02 17:57:33,joerih1995,Added member to the database," added member: 4557810729, Joeri Huigsloot",No
+2022-10-02 17:57:58,joerih1995,Choose option,option: 5,No
+2022-10-02 17:58:07,joerih1995,Change information member, search for member with wrong input: njksfn,Yes
+2022-10-02 17:58:11,joerih1995,Choose option,option: 6,No
+2022-10-02 17:58:15,joerih1995,Deleted from database,member 4557810729 deleted,No
+2022-10-02 17:58:29,joerih1995,Choose option,option: 5,No
+2022-10-02 17:58:33,joerih1995,Change information member, search for member with wrong input: ,Yes
+2022-10-02 18:04:25,joerih1995,Choose option,option: 1,No
+2022-10-02 18:04:47,joerih1995,Added member to the database," added member: 1552721418, Joeri Lastname",No
+2022-10-02 18:04:54,joerih1995,Choose option,option: 7,No
+2022-10-02 18:05:00,joerih1995,Edit employee, search for employee with wrong input: joeri7,Yes
+2022-10-02 18:05:08,joerih1995,Choose option,option: 7,No
+2022-10-02 18:05:46,joerih1995,Edited employee, edited employee: joeri8,No
+2022-10-02 18:06:40,joerih1995,Choose option,option: 8,No
+2022-10-02 18:06:45,joerih1995,Deleted from database,employee 14 deleted,No
+2022-10-02 18:07:14,joerih1995,Choose option,option: 11,No
+2022-10-02 18:07:14,joerih1995,List employees with rights, all employees with rights,No
+2022-10-02 18:07:20,joerih1995,Choose option,option: 14,No
+2022-10-02 18:07:20,joerih1995,Exit system,rights: 2,No
+2022-10-02 18:07:20,joerih1995,Logged out,rights: 2,No
+2022-10-02 18:08:10,superadmin,Logged in,rights: 1,No
+2022-10-02 18:17:35,superadmin,Logged in,rights: 1,No
+2022-10-02 18:17:46,superadmin,Choose option,option: 8,No
+2022-10-02 18:22:26,superadmin,Edited employee, edited employee: joerhu1995,No
+2022-10-02 18:22:33,superadmin,Choose option,option: 11,No
+2022-10-02 18:22:33,superadmin,List employees with rights, all employees with rights,No
+2022-10-02 18:23:46,superadmin,Logged in,rights: 1,No
+2022-10-02 18:23:48,superadmin,Choose option,option: 11,No
+2022-10-02 18:23:48,superadmin,List employees with rights, all employees with rights,No
+2022-10-02 18:24:09,superadmin,Logged in,rights: 1,No
+2022-10-02 18:24:11,superadmin,Choose option,option: 11,No
+2022-10-02 18:24:11,superadmin,List employees with rights, all employees with rights,No
+2022-10-02 18:27:35,superadmin,Logged in,rights: 1,No
+2022-10-02 18:27:54,superadmin,Choose option,option: 15,No
