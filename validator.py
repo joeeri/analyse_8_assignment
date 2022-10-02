@@ -23,8 +23,20 @@ class Validator:
 
     def checkusername(self, input_username):
         usernameCharacters = self.lowercase_letters + self.numbers + "_'."
-        if all(c in usernameCharacters for c in input_username) and input_username[0].isalpha() \
-                and len(input_username) > 5 and len(input_username) < 11:
+        if(input_username):
+            connection = sqlite3.connect("family.db")
+            cursor = connection.cursor()
+            check_username = self.hash(input_username)
+            cursor.execute("SELECT * FROM employees WHERE username = ?", [check_username])
+            res_of_username = cursor.fetchall()
+            if res_of_username:
+                return {"correct": False,
+                "message": "Username is already taken. Please try again.\n"
+                           "Note: It can only start with a letter and must be between 6 and 10 characters.\n"
+                           "It can only contain [letters, numbers and (_), ('), (.)], please try again\n"}
+        if all(c in usernameCharacters for c in input_username) \
+                and 5 < len(input_username) < 11 \
+                and input_username[0].isalpha():
             return {"correct": True, "message": None}
         else:
             return {"correct": False,

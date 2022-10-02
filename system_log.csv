@@ -302,3 +302,48 @@ Session closed because the input contains SQL-like language",while looking for m
 2022-10-02 16:34:33,superadmin,Added member to the database," added member: 3248476082, Joeri Huigsloot",No
 2022-10-02 16:37:29,superadmin,Choose option,option: 6,No
 2022-10-02 16:45:01,superadmin,Edited member id: 3248476082, edited member: Joeri Huig,No
+2022-10-02 16:48:08,superadmin,Logged in,rights: 1,No
+2022-10-02 16:48:30,superadmin,Choose option,option: 7,No
+2022-10-02 16:48:34,superadmin,Malicious input detected: looking for membership_id,"try to delete member, input: 23124",Yes
+2022-10-02 16:48:42,superadmin,Choose option,option: 7,No
+2022-10-02 16:48:48,superadmin,Delete member, search for member with wrong input: blabla,Yes
+2022-10-02 16:48:55,superadmin,Choose option,option: 7,No
+2022-10-02 16:49:08,superadmin,Deleted from database,member 3248476082 deleted,No
+2022-10-02 16:49:24,superadmin,Choose option,option: 3,No
+2022-10-02 16:57:32,superadmin,Logged in,rights: 1,No
+2022-10-02 16:57:35,superadmin,Choose option,option: 3,No
+2022-10-02 16:59:32,superadmin,Logged in,rights: 1,No
+2022-10-02 16:59:35,superadmin,Choose option,option: 3,No
+2022-10-02 17:00:04,superadmin,Logged in,rights: 1,No
+2022-10-02 17:00:06,superadmin,Choose option,option: 3,No
+2022-10-02 17:00:41,superadmin,Logged in,rights: 1,No
+2022-10-02 17:00:43,superadmin,Choose option,option: 1,No
+2022-10-02 17:12:37,superadmin,Logged in,rights: 1,No
+2022-10-02 17:12:41,superadmin,Choose option,option: 3,No
+2022-10-02 17:21:33,superadmin,Logged in,rights: 1,No
+2022-10-02 17:21:36,superadmin,Choose option,option: 3,No
+2022-10-02 17:23:14,superadmin,Logged in,rights: 1,No
+2022-10-02 17:23:18,superadmin,Choose option,option: 3,No
+2022-10-02 17:24:34,superadmin,Logged in,rights: 1,No
+2022-10-02 17:24:36,superadmin,Choose option,option: 3,No
+2022-10-02 17:25:23,superadmin,Logged in,rights: 1,No
+2022-10-02 17:25:24,superadmin,Choose option,option: 3,No
+2022-10-02 17:27:33,superadmin,Logged in,rights: 1,No
+2022-10-02 17:27:35,superadmin,Choose option,option: 3,No
+2022-10-02 17:28:16,superadmin,Logged in,rights: 1,No
+2022-10-02 17:28:17,superadmin,Choose option,option: 3,No
+2022-10-02 17:28:49,superadmin,Logged in,rights: 1,No
+2022-10-02 17:28:51,superadmin,Choose option,option: 3,No
+2022-10-02 17:29:47,superadmin,Logged in,rights: 1,No
+2022-10-02 17:29:51,superadmin,Choose option,option: 3,No
+2022-10-02 17:30:42,superadmin,Logged in,rights: 1,No
+2022-10-02 17:30:44,superadmin,Choose option,option: 3,No
+2022-10-02 17:31:07,superadmin,Added to the database, added employee: joeri1995 with rights: advisor,No
+2022-10-02 17:35:33,superadmin,Logged in,rights: 1,No
+2022-10-02 17:35:35,superadmin,Choose option,option: 3,No
+2022-10-02 17:37:34,superadmin,Logged in,rights: 1,No
+2022-10-02 17:37:36,superadmin,Choose option,option: 3,No
+2022-10-02 17:41:49,superadmin,Logged in,rights: 1,No
+2022-10-02 17:41:50,superadmin,Choose option,option: 3,No
+2022-10-02 17:42:22,superadmin,Logged in,rights: 1,No
+2022-10-02 17:42:24,superadmin,Choose option,option: 3,No
