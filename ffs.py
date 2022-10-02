@@ -1,6 +1,5 @@
 import sqlite3
 import sys
-from itertools import repeat
 from sqlite3 import Error
 import validator
 import logger
@@ -9,7 +8,6 @@ import datetime
 from getpass import getpass
 from user import User
 from zipfile import ZipFile
-
 
 class FurnicorFamilySystem:
     def __init__(self):
@@ -719,21 +717,40 @@ class FurnicorFamilySystem:
                         self.exit()
                         break
                 elif option == "10":
-                    getemployees = self.cursor.execute(
-                        "SELECT id, username, first_name, last_name, rights FROM employees "
-                        "WHERE rights = 'systemadmin' OR rights = 'advisor'")
+                    getemployees = self.cursor.execute("SELECT id, username, first_name, last_name, rights FROM employees "
+                                                       "WHERE rights = '2' OR rights = '3'")
                     listemployees = getemployees.fetchall()
+                    showemployees = list()
+                    print("Employees:")
                     for x in listemployees:
-                        print("ID:", x[0], "Username:", self.validator.unhash(x[1]),
-                              f"Name: {x[2]} {x[3]}, Right: {x[4]}")
-                    chooseemployee = input("Type the id of the employee who's password needs to be updated: ")
+                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {x[2]} {x[3]} ",
+                              "systemadmin" if x[4] == "2" else "advisor")
+                        showemployees.append(x[0])
+                    chooseemployee = input("Type the ID of the employee password needs to be changed: ")
                     try:
                         int(chooseemployee)
+                        res_name_check = self.validator.validatelist(showemployees,
+                                                                     int(chooseemployee))  # If this input is not correct the
+                        if not res_name_check["correct"]:
+                            print(res_name_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for employee_id",
+                                            f"try to change password, input: {chooseemployee}", "Yes")
+                            break
                     except ValueError:
-                        self.logger.log(self.user.username, "Change password",
-                                        f" search for employee changes password: {chooseemployee}", "Yes")
-                        print("\nThat's not an id, please try again")
-                        continue
+                        res_name_string_check = self.validator.checkattack(chooseemployee)
+                        if not res_name_string_check["correct"]:
+                            print(res_name_string_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for employee_id",
+                                            f"try to delete employee, input: {chooseemployee}", "Yes")
+                            self.forceexit()
+                            break
+                        else:
+                            self.logger.log(self.user.username, "Change password employee",
+                                            f" search for employee with wrong input: {chooseemployee}", "Yes")
+                            print("\nThat's not an id, please try again")
+                            continue
                     res = self.updatepassword(chooseemployee)
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
@@ -742,7 +759,11 @@ class FurnicorFamilySystem:
                 elif option == "11":
                     self.listemployeeswithrights()
                 elif option == "12":
-                    self.searchmember()
+                    res = self.searchmember()
+                    if res["attack"]:
+                        self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
+                        self.forceexit()
+                        break
                 elif option == "13":
                     self.logout()
                     user_in_menu = False
@@ -750,7 +771,16 @@ class FurnicorFamilySystem:
                     self.exit()
                     break
                 else:
-                    print("Option does not exists. Please choose again with 1, 2, 3 or 4")
+                    res_input_check = self.validator.checkattack(option)
+                    if not res_input_check["correct"]:
+                        print(res_input_check["message"])
+                        self.logger.log(self.user.username,
+                                        "Malicious input detected: input for option in menu",
+                                        f"with input, input: {option}", "Yes")
+                        self.forceexit()
+                        break
+                    else:
+                        print("Option does not exists. Please choose again with an integer 1 to 14")
                     continue
 
             elif self.user.rights == "2": #systemadmin
@@ -771,132 +801,253 @@ class FurnicorFamilySystem:
                     "14: Exit")
                 option = input("Choose option with 1 and 14. Just type the number and hit enter: ")
                 if option == "1":
-                    res = self.addmember()
+                    res = self.addmember() # Add a new member
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
                         self.forceexit()
                         break
                 elif option == "2":
-                    res = self.addemployee("advisor")
+                    res = self.addemployee(3, "advisor") # Add a new advisor
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
                         self.forceexit()
                         break
                 elif option == "3":
-                    self.logger.getlogs()
+                    self.logger.getlogs() # Request systemlog
                 elif option == "4":
-                    self.createbackup()
+                    self.createbackup() # Create backup
                 elif option == "5":
-                    getmembers = self.cursor.execute("SELECT membership_id, full_name FROM members")
+                    print("List of members:") # Edit information from a member
+                    getmembers = self.cursor.execute("SELECT membership_id, first_name, last_name FROM members")
                     listmembers = getmembers.fetchall()
+                    showmembers = list()
                     for x in listmembers:
-                        print("ID:", x[0], "Name:", x[1])
-                    choosemember = input("Type the membership id of the user who's information needs to be changed: ")
+                        print("Membership id:", x[0], "Name:", x[1], x[2])
+                        showmembers.append(x[0])
+                    choosemember = input(f" \n Membership id's {showmembers} \n"
+                                         "Type the membership id from aboves information of the user who's information needs to be changed: ")
                     try:
                         int(choosemember)
+                        res_name_check = self.validator.validatelist(showmembers,
+                                                                     int(choosemember))  # If this input is not correct the
+                        if not res_name_check["correct"]:  # session will be stopped
+                            print(res_name_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for membership_id",
+                                            f"try to edit member, input: {choosemember}", "Yes")
+                            break
                     except ValueError:
-                        self.logger.log(self.user.username, "Change information member",
-                                        f" search for member: {choosemember}", "Yes")
-                        print("\nThat's not an id, please try again")
-                        continue
+                        res_name_string_check = self.validator.checkattack(choosemember)
+                        if not res_name_string_check["correct"]:
+                            print(res_name_string_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for membership_id",
+                                            f"try to editing members information, input: {choosemember}", "Yes")
+                            self.forceexit()
+                            break
+                        else:
+                            self.logger.log(self.user.username, "Change information member",
+                                            f" search for member with wrong input: {choosemember}", "Yes")
+                            print("\nThat's not an id, please try again")
+                            continue
                     res = self.editmember(choosemember)
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
                         self.forceexit()
                         break
                 elif option == "6":
-                    getmembers = self.cursor.execute("SELECT membership_id, full_name FROM members")
+                    print("List of members: ") # Delete a member
+                    getmembers = self.cursor.execute("SELECT membership_id, first_name, last_name FROM members")
                     listmembers = getmembers.fetchall()
+                    showmembers = list()
                     for x in listmembers:
-                        print("ID:", x[0], "Name:", x[1])
-                    choosemember = input("Type the membership id of the member who needs to be deleted: ")
+                        print("Membership id:", x[0], "Name:", x[1], x[2])
+                        showmembers.append(x[0])
+                    choosemember = input(f" \nMembership id's {showmembers} \n"
+                                         "Type the membership id of the member who needs to be deleted: ")
                     try:
                         int(choosemember)
+                        res_name_check = self.validator.validatelist(showmembers,
+                                                                     int(choosemember))  # If this input is not correct the
+                        if not res_name_check["correct"]:  # session will be stopped
+                            print(res_name_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for membership_id",
+                                            f"try to delete member, input: {choosemember}", "Yes")
+                            break
                     except ValueError:
-                        self.logger.log(self.user.username, "Delete member",
-                                        f" search for deletion member: {choosemember}", "Yes")
-                        print("\nThat's not an id, please try again")
-                        continue
+                        res_name_string_check = self.validator.checkattack(choosemember)
+                        if not res_name_string_check["correct"]:
+                            print(res_name_string_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for membership_id",
+                                            f"try to delete member, input: {choosemember}", "Yes")
+                        else:
+                            self.logger.log(self.user.username, "Delete member",
+                                            f" search for member with wrong input: {choosemember}", "Yes")
+                            print("\nThat's not an id, please try again")
+                            continue
                     res = self.deletemember(choosemember)
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
                         self.forceexit()
                         break
                 elif option == "7":
-                    getemployees = self.cursor.execute("SELECT id, username, first_name, last_name, rights FROM employees "
-                                                       "WHERE rights = 'advisor'")
+                    # Edit information from a employee (advisor)
+                    getemployees = self.cursor.execute(
+                        "SELECT id, username, first_name, last_name, rights FROM employees "
+                        "WHERE rights = '3'")
                     listemployees = getemployees.fetchall()
+                    showemployees = list()
                     for x in listemployees:
-                        print("ID:", x[0], "Username:", self.validator.unhash(x[1]),
-                              f"Name: {x[2]} {x[3]}", "Right:", x[4])
-                    chooseemployee = input("Type the id of the employee (advisor) who's information needs to be changed: ")
+                        print("Employee id:", x[0], "Username:", self.validator.unhash(x[1]),
+                              f"Name: {x[2]} {x[3]}", "systemadmin" if x[4] == "2" else "advisor")
+                        showemployees.append(x[0])
+                    chooseemployee = input(f" \nEmployee id's {showemployees} \n"
+                                           "Type the id of the employee who's information needs to be changed: ")
                     try:
                         int(chooseemployee)
+                        res_name_check = self.validator.validatelist(showemployees,
+                                                                     int(chooseemployee))  # If this input is not correct the
+                        if not res_name_check["correct"]:  # session will be stopped
+                            print(res_name_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for employee_id",
+                                            f"try to edit member, input: {chooseemployee}", "Yes")
+                            break
                     except ValueError:
-                        self.logger.log(self.user.username, "Edit employee",
-                                        f" search for editing employee: {chooseemployee}", "Yes")
-                        print("\nThat's not an id, please try again")
-                        continue
+                        res_name_string_check = self.validator.checkattack(chooseemployee)
+                        if not res_name_string_check["correct"]:
+                            print(res_name_string_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for employee_id",
+                                            f"try to edit employee, input: {chooseemployee}", "Yes")
+                        else:
+                            self.logger.log(self.user.username, "Edit employee",
+                                            f" search for employee with wrong input: {chooseemployee}", "Yes")
+                            print("\nThat's not an id, please try again")
+                            continue
                     res = self.editemployee(chooseemployee)
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
                         self.forceexit()
                         break
                 elif option == "8":
-                    getemployees = self.cursor.execute("SELECT id, username, first_name, last_name, rights FROM employees "
-                                                       "WHERE rights = 'advisor'")
+                    # Delete an employee (advisor)
+                    getemployees = self.cursor.execute(
+                        "SELECT id, username, first_name, last_name, rights FROM employees "
+                        "WHERE rights = '3'")
                     listemployees = getemployees.fetchall()
+                    showemployees = list()
                     print("Employees:")
                     for x in listemployees:
-                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {x[2]} {x[3]}, Right: {x[4]}")
-                    chooseemployee = input("Type the ID of the employee who's needs to be deleted: ")
+                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {x[2]} {x[3]} ",
+                              "systemadmin" if x[4] == "2" else "advisor")
+                        showemployees.append(x[0])
+                    chooseemployee = input("Type the ID of the employee who needs to be deleted: ")
                     try:
                         int(chooseemployee)
+                        res_name_check = self.validator.validatelist(showemployees,
+                                                                     int(chooseemployee))  # If this input is not correct the
+                        if not res_name_check["correct"]:
+                            print(res_name_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for employee_id",
+                                            f"try to delete member, input: {chooseemployee}", "Yes")
+                            break
                     except ValueError:
-                        self.logger.log(self.user.username, "Delete employee",
-                                        f" search for deleting employee: {chooseemployee}", "Yes")
-                        print("\nThat's not an id, please try again")
-                        continue
+                        res_name_string_check = self.validator.checkattack(chooseemployee)
+                        if not res_name_string_check["correct"]:
+                            print(res_name_string_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for employee_id",
+                                            f"try to delete employee, input: {chooseemployee}", "Yes")
+                            self.forceexit()
+                            break
+                        else:
+                            self.logger.log(self.user.username, "Delete employee",
+                                            f" search for employee with wrong input: {chooseemployee}", "Yes")
+                            print("\nThat's not an id, please try again")
+                            continue
                     res = self.deleteemployee(chooseemployee)
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
-                        self.forceexit()
+                        self.exit()
                         break
                 elif option == "9":
+                    # Update password from an employee (advisor)
                     getemployees = self.cursor.execute(
                         "SELECT id, username, first_name, last_name, rights FROM employees "
-                        "WHERE rights = 'advisor'")
+                        "WHERE rights = '3'")
                     listemployees = getemployees.fetchall()
+                    showemployees = list()
+                    print("Employees:")
                     for x in listemployees:
-                        print("ID:", x[0], "Username:", self.validator.unhash(x[1]),
-                              f"Name: {x[2]} {x[3]}, Right: {x[4]}")
-                    chooseemployee = input("Type the id of the employee who's password needs to be updated: ")
+                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {x[2]} {x[3]} ",
+                              "systemadmin" if x[4] == "2" else "advisor")
+                        showemployees.append(x[0])
+                    chooseemployee = input("Type the ID of the employee password needs to be changed: ")
                     try:
                         int(chooseemployee)
+                        res_name_check = self.validator.validatelist(showemployees,
+                                                                     int(chooseemployee))  # If this input is not correct the
+                        if not res_name_check["correct"]:
+                            print(res_name_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for employee_id",
+                                            f"try to change password, input: {chooseemployee}", "Yes")
+                            break
                     except ValueError:
-                        self.logger.log(self.user.username, "Change password",
-                                        f" search for employee changes password: {chooseemployee}", "Yes")
-                        print("\nThat's not an id, please try again")
-                        continue
+                        res_name_string_check = self.validator.checkattack(chooseemployee)
+                        if not res_name_string_check["correct"]:
+                            print(res_name_string_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for employee_id",
+                                            f"try to change password, input: {chooseemployee}", "Yes")
+                            self.forceexit()
+                            break
+                        else:
+                            self.logger.log(self.user.username, "Change password employee",
+                                            f" search for employee with wrong input: {chooseemployee}", "Yes")
+                            print("\nThat's not an id, please try again")
+                            continue
                     res = self.updatepassword(chooseemployee)
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
                         self.forceexit()
                         break
                 elif option == "10":
+                    # Update own password
                     self.update_own_password()
                 elif option == "11":
+                    # List employees with rights
                     self.listemployeeswithrights()
                 elif option == "12":
-                    self.searchmember()
+                    # Search for a member
+                    res = self.searchmember()
+                    if res["attack"]:
+                        self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
+                        self.forceexit()
+                        break
                 elif option == "13":
+                    # Logout
                     self.logout()
                     user_in_menu = False
                 elif option == "14":
+                    # Exit
                     self.exit()
                     break
                 else:
-                    print("Option does not exists. Please choose again with 1, 2, 3 or 4")
+                    res_input_check = self.validator.checkattack(option)
+                    if not res_input_check["correct"]:
+                        print(res_input_check["message"])
+                        self.logger.log(self.user.username,
+                                        "Malicious input detected: input for option in menu",
+                                        f"with input, input: {option}", "Yes")
+                        self.forceexit()
+                        break
+                    else:
+                        print("Option does not exists. Please choose again with an integer 1 to 14")
                     continue
 
             elif self.user.rights == "3": #advisor
@@ -907,41 +1058,81 @@ class FurnicorFamilySystem:
                       "4: Search member\n"
                       "5: Log out\n"
                       "6: Exit")
-                option = input("Choose option with 1 and 6. Just type the number and hit enter: ")
+                option = input("Choose option from 1 to 6. Just type the number and hit enter: ")
                 if option == "1":
-                    res = self.addmember()
+                    res = self.addmember() # Add a new  member
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
                         self.forceexit()
                         break
                 elif option == "2":
-                    getmembers = self.cursor.execute("SELECT id, full_name FROM members")
+                    print("List of members:") # Edit information from a member
+                    getmembers = self.cursor.execute("SELECT membership_id, first_name, last_name FROM members")
                     listmembers = getmembers.fetchall()
+                    showmembers = list()
                     for x in listmembers:
-                        print(f"ID: {x[0]}, Name: {x[1]}")
-                    choosemember = input("Type the id of the user who's password needs to be changed: ")
+                        print("Membership id:", x[0], "Name:", x[1], x[2])
+                        showmembers.append(x[0])
+                    choosemember = input(f" \n Membership id's {showmembers} \n"
+                                         "Type the membership id from aboves information of the user who's information needs to be changed: ")
                     try:
                         int(choosemember)
+                        res_name_check = self.validator.validatelist(showmembers,
+                                                                     int(choosemember))  # If this input is not correct the
+                        if not res_name_check["correct"]:  # session will be stopped
+                            print(res_name_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for membership_id",
+                                            f"try to edit member, input: {choosemember}", "Yes")
+                            break
                     except ValueError:
-                        print("\nThat's not an id, please try again")
-                        continue
+                        res_name_string_check = self.validator.checkattack(choosemember)
+                        if not res_name_string_check["correct"]:
+                            print(res_name_string_check["message"])
+                            self.logger.log(self.user.username,
+                                            "Malicious input detected: looking for membership_id",
+                                            f"try to editing members information, input: {choosemember}", "Yes")
+                            self.forceexit()
+                            break
+                        else:
+                            self.logger.log(self.user.username, "Change information member",
+                                            f" search for member with wrong input: {choosemember}", "Yes")
+                            print("\nThat's not an id, please try again")
+                            continue
                     res = self.editmember(choosemember)
                     if res["attack"]:
                         self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
                         self.forceexit()
                         break
                 elif option == "3":
+                    # Update own password
                     self.update_own_password()
                 elif option == "4":
-                    self.searchmember()
+                    # Search a member
+                    res = self.searchmember()
+                    if res["attack"]:
+                        self.logger.log(self.user.username, res["log"], res["add_info"], "Yes")
+                        self.forceexit()
+                        break
                 elif option == "5":
+                    # Log out
                     self.logout()
                     user_in_menu = False
                 elif option == "6":
+                    # Exit
                     self.exit()
                     break
                 else:
-                    print("Option does not exists. Please choose again with 1 or 2")
+                    res_input_check = self.validator.checkattack(option)
+                    if not res_input_check["correct"]:
+                        print(res_input_check["message"])
+                        self.logger.log(self.user.username,
+                                        "Malicious input detected: input for option in menu",
+                                        f"with input, input: {option}", "Yes")
+                        self.forceexit()
+                        break
+                    else:
+                        print("Option does not exists. Please choose again with an integer 1 to 6")
                     continue
 
     def createbackup(self):  # Creates backup of db by putting it into a new instance + zips both the log file and the backup.db together
@@ -1009,7 +1200,7 @@ class FurnicorFamilySystem:
         self.cursor.execute('''UPDATE employees SET password = ?  WHERE id = ?''',
                             (hashed_password, self.user.id))
         self.connection.commit()
-        print("--Own password updated successfully--")
+        print("--Own password updated successfully--\n")
         self.logger.log(self.user.username, "Updated own password", f" updated password user id: {self.user.id}", "No")
         return {"attack": False}
 
@@ -1031,7 +1222,7 @@ class FurnicorFamilySystem:
         self.cursor.execute('''UPDATE employees SET password = ?  WHERE id = ?''',
                             (hashed_password, employee_id))
         self.connection.commit()
-        print("--Password updated successfully--")
+        print(f"--Password from id: {employee_id} updated successfully--")
         self.logger.log(self.user.username, "Updated password", f" updated password id: {employee_id}", "No")
         return {"attack": False}
 
@@ -1039,15 +1230,23 @@ class FurnicorFamilySystem:
         list_employees = self.cursor.execute("SELECT id, username, rights FROM employees")
         hashed_employees = list_employees.fetchall()
         for x in hashed_employees:
-            print("ID:", x[0], "Username:", self.validator.unhash(x[1]), "Right: ", x[2])
+            print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Right: ",
+                  "systemadmin" if x[2] == "2" else "advisor")
         self.logger.log(self.user.username, "List employees with rights",
                         f" all employees with rights", "No")
 
     def searchmember(self):
-        member_to_search = input("Of which member would you like the information? Note : Partial input is also permitted : ")
-        search = self.cursor.execute('''SELECT * FROM members WHERE full_name LIKE ?
+        member_to_search = input("Of which member would you like the information? Note: Partial input is also permitted : ")
+        res_member_check = self.validator.checkattack(member_to_search)
+        if not res_member_check["correct"]:
+            print(res_member_check["message"])
+            return {"attack": True, "log": res_member_check["message"],
+                    "add_info": f"while looking for member: {member_to_search}"}
+        search = self.cursor.execute('''SELECT * FROM members WHERE first_name LIKE ?
+                                                                     OR last_name LIKE ?
                                                                      OR membership_id LIKE ? 
-                                                                     OR street_and_number LIKE ?
+                                                                     OR street LIKE ?
+                                                                     OR housenumber LIKE ?
                                                                      OR zipcode LIKE ?
                                                                      OR city LIKE ?
                                                                      OR email LIKE ?
@@ -1058,14 +1257,20 @@ class FurnicorFamilySystem:
                                                                            '%' + member_to_search + '%',
                                                                            '%' + member_to_search + '%',
                                                                            '%' + member_to_search + '%',
+                                                                           '%' + member_to_search + '%',
+                                                                           '%' + member_to_search + '%',
                                                                            '%' + member_to_search + '%',))
         self.connection.commit()
 
         members = search.fetchall()
-        for x in members:
-            print(f"ID: {x[0]}, Membership ID: {x[1]}, Name: {x[2]}, Street and number: {x[3]}, "
-                  f"Zipcode: {x[4]}, City: {x[5]}, Email: {x[6]}, Registration date: {x[7]}")
-        self.logger.log(self.user.username, "Searched members", f" input search command: {member_to_search}", "No")
+        if members:
+            for x in members:
+                print(f"ID: {x[0]}, Membership ID: {x[1]}, Name: {x[2]}, Street and number: {x[3]}, "
+                      f"Zipcode: {x[4]}, City: {x[5]}, Email: {x[6]}, Registration date: {x[7]}")
+        else:
+            print(f"No members found with input {member_to_search}, please try again")
+        self.logger.log(self.user.username, "Searched members", f" input search command: {member_to_search} at function: searchmember", "No")
+        return {"attack": False}
 
 if __name__ == "__main__":
     program = FurnicorFamilySystem()

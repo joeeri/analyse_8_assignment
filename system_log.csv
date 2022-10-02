@@ -245,3 +245,48 @@ Session closed because the input contains SQL-like language",while editing emplo
 2022-09-27 18:10:08,superadmin,Logged in,rights: 1,No
 2022-09-27 18:11:43,superadmin,Logged in,rights: 1,No
 2022-09-27 18:12:10,superadmin,Edited employee, edited employee: joeritest3,No
+2022-10-02 12:28:03,superadmin,Logged in,rights: 1,No
+2022-10-02 12:28:05,superadmin,List employees with rights, all employees with rights,No
+2022-10-02 12:31:34,superadmin,Logged in,rights: 1,No
+2022-10-02 12:32:22,superadmin,Logged in,rights: 1,No
+2022-10-02 12:32:25,superadmin,List employees with rights, all employees with rights,No
+2022-10-02 12:33:07,superadmin,Logged in,rights: 1,No
+2022-10-02 12:33:09,superadmin,List employees with rights, all employees with rights,No
+2022-10-02 12:33:36,superadmin,Logged in,rights: 1,No
+2022-10-02 12:33:38,superadmin,List employees with rights, all employees with rights,No
+2022-10-02 12:42:33,superadmin,Logged in,rights: 1,No
+2022-10-02 12:42:45,superadmin,Change password employee, search for employee with wrong input: blabla,Yes
+2022-10-02 12:42:57,superadmin,Malicious input detected: looking for employee_id,"try to delete employee, input: alter",Yes
+2022-10-02 12:43:05,superadmin,Logged in,rights: 1,No
+2022-10-02 12:44:53,superadmin,Updated password, updated password id: 8,No
+2022-10-02 12:47:18,superadmin,Logged in,rights: 1,No
+2022-10-02 12:53:26,superadmin,Logged in,rights: 1,No
+2022-10-02 12:55:07,superadmin,Logged in,rights: 1,No
+2022-10-02 12:55:11,superadmin,Searched members, input search command: joer,No
+2022-10-02 12:56:28,superadmin,Logged in,rights: 1,No
+2022-10-02 12:56:37,superadmin,Searched members, input search command: joer,No
+2022-10-02 12:56:52,superadmin,Logged in,rights: 1,No
+2022-10-02 12:56:56,superadmin,"
+Session closed because the input contains SQL-like language","while looking for member: {'correct': False, 'message': '\nSession closed because the input contains SQL-like language'}",Yes
+2022-10-02 13:11:12,superadmin,Logged in,rights: 1,No
+2022-10-02 13:11:18,superadmin,"
+Session closed because the input contains SQL-like language",while looking for member: select,Yes
+2022-10-02 13:12:00,superadmin,Logged in,rights: 1,No
+2022-10-02 13:12:03,superadmin,Searched members, input search command: joeri at function: searchmember,No
+2022-10-02 13:12:34,superadmin,Logged in,rights: 1,No
+2022-10-02 13:12:39,superadmin,Searched members, input search command: bla at function: searchmember,No
+2022-10-02 13:13:09,superadmin,Logged in,rights: 1,No
+2022-10-02 13:13:21,superadmin,Logged in,rights: 1,No
+2022-10-02 13:16:09,superadmin,Logged in,rights: 1,No
+2022-10-02 13:17:42,superadmin,Logged in,rights: 1,No
+2022-10-02 13:17:45,superadmin,Searched members, input search command: bla at function: searchmember,No
+2022-10-02 13:18:06,superadmin,Logged in,rights: 1,No
+2022-10-02 13:18:10,superadmin,Searched members, input search command: joeri at function: searchmember,No
+2022-10-02 13:26:37,superadmin,Logged in,rights: 1,No
+2022-10-02 13:26:53,superadmin,List employees with rights, all employees with rights,No
+2022-10-02 13:28:42,joeritest,Logged in,rights: 2,No
+2022-10-02 13:29:36,joeritest,Logged in,rights: 2,No
+2022-10-02 13:59:00,joeritest,Logged in,rights: 2,No
+2022-10-02 13:59:12,joeritest,Updated own password, updated password user id: 6,No
+2022-10-02 14:18:16,superadmin,Logged in,rights: 1,No
+2022-10-02 14:18:25,superadmin,Malicious input detected: input for option in menu,"with input, input: select",Yes
