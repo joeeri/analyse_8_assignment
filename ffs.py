@@ -8,6 +8,9 @@ import datetime
 from getpass import getpass
 from user import User
 from zipfile import ZipFile
+from cryptography.fernet import Fernet
+
+import pandas as pd
 
 class FurnicorFamilySystem:
     def __init__(self):
@@ -535,6 +538,7 @@ class FurnicorFamilySystem:
                     "10: Update password from an employee\n"
                     "11: List users with rights\n"
                     "12: Search member\n"
+                    "13: Create new Encryption key\n"
                     "13: Log out\n"
                     "14: Exit")
                 option = input("Choose option from 1 to 14. Just type the number and hit enter: ")
@@ -768,9 +772,11 @@ class FurnicorFamilySystem:
                         self.forceexit()
                         break
                 elif option == "13":
+                    self.createNewFernetKey()
+                elif option == "14":
                     self.logout()
                     user_in_menu = False
-                elif option == "14":
+                elif option == "15":
                     self.exit()
                     break
                 else:
@@ -1141,6 +1147,13 @@ class FurnicorFamilySystem:
                         print("\nOption does not exists. Please choose again with an integer 1 to 6")
                     continue
 
+    def createNewFernetKey(self):
+
+        key = Fernet.generate_key()
+        dec_key = key.decode('utf-8')
+        with open('filekey.key', 'w') as filekey:
+            filekey.write(dec_key)
+
     def createbackup(self):  # Creates backup of db by putting it into a new instance + zips both the log file and the backup.db together
         global backup_con
         try:
@@ -1154,8 +1167,8 @@ class FurnicorFamilySystem:
         finally:
             if backup_con:
                 backup_con.close()
-
-        zipObj = ZipFile(f'Backup {datetime.datetime.now()}.zip', 'w')
+        
+        zipObj = ZipFile('Backup_.zip', 'w')
 
         zipObj.write('system_log.csv')
         zipObj.write('Sqlite_backup.db')
