@@ -21,12 +21,14 @@ class FurnicorFamilySystem:
         self.logged_in = False
         self.validator = validator.Validator()
         self.logger = logger.Logger()
+        self.dbname = "family.db"
 
 
     def startsystem(self):
         print("--Welcome to the system!--\n")
         try:
-            self.connection = sqlite3.connect("family.db")
+
+            self.connection = sqlite3.connect(self.dbname)
             self.cursor = self.connection.cursor()
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS members
                            (id integer PRIMARY KEY AUTOINCREMENT, membership_id integer UNIQUE, first_name text,
@@ -102,6 +104,7 @@ class FurnicorFamilySystem:
             print("\n--Add information to member--\n")
             while True:
                 first_name = input("First name: ")  # First name
+                hashed_first_name = self.validator.hash(first_name)
                 res_first_name_check = self.validator.checkattack(first_name)
                 if not res_first_name_check["correct"]:
                     print(res_first_name_check["message"])
@@ -117,6 +120,7 @@ class FurnicorFamilySystem:
                         continue
             while True:
                 last_name = input("Last name: ")  # Last name
+                hashed_last_name = self.validator.hash(last_name)
                 res_last_name_check = self.validator.checkattack(last_name)
                 if not res_last_name_check["correct"]:
                     print(res_last_name_check["message"])
@@ -133,6 +137,7 @@ class FurnicorFamilySystem:
 
             while True:
                 street = input("Street: ")  # Street
+                hashed_street = self.validator.hash(street)
                 res_street_check = self.validator.checkattack(street)
                 if not res_street_check["correct"]:
                     print(res_street_check["message"])
@@ -149,6 +154,7 @@ class FurnicorFamilySystem:
 
             while True:
                 housenumber = input("House number: ")  # Housenumber
+                hashed_housenumber = self.validator.hash(housenumber)
                 res_housenumber_check = self.validator.checkattack(housenumber)
                 if not res_housenumber_check["correct"]:
                     print(res_housenumber_check["message"])
@@ -165,6 +171,7 @@ class FurnicorFamilySystem:
 
             while True:
                 zip_code = input("Zipcode [0000AA]: ")  # Postcode
+                hashed_zipcode = self.validator.hash(zip_code)
                 res_zip_code_check = self.validator.checkattack(zip_code)
                 if not res_zip_code_check["correct"]:
                     print(res_zip_code_check["message"])
@@ -191,6 +198,7 @@ class FurnicorFamilySystem:
 
             while True:
                 email = input("Email: ")  # Email
+                hashed_email = self.validator.hash(email)
                 res_mail_check = self.validator.checkattack(email)
                 if not res_mail_check["correct"]:
                     print(res_mail_check["message"])
@@ -217,6 +225,7 @@ class FurnicorFamilySystem:
                     res_mobile_phone = self.validator.checkphonenumber(phonenumber)
                     if res_mobile_phone["correct"]:
                         mobile_phone = landcode + phonenumber
+                        hashed_mobile_phone = self.validator.hash(mobile_phone)
                         break
                     else:
                         print(res_mobile_phone["message"])
@@ -239,7 +248,7 @@ class FurnicorFamilySystem:
         self.cursor.execute(
             "INSERT INTO members(membership_id, first_name, last_name, street, housenumber, zipcode, city, email, phone)"
             " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (membership_id, first_name, last_name, street, housenumber, zip_code, self.validator.cities[city], email, mobile_phone))
+            (membership_id, hashed_first_name, hashed_last_name, hashed_street, hashed_housenumber, hashed_zipcode, self.validator.cities[city], hashed_email, hashed_mobile_phone))
         self.connection.commit()
         self.logger.log(self.user.username, "Added member to the database",
                         f" added member: {membership_id}, {first_name} {last_name}", "No")
@@ -253,6 +262,7 @@ class FurnicorFamilySystem:
             print(f"\n--Edit information from member_id: {member_id}--\n")
             while True:
                 first_name = input("First name: ")  # First name
+                hashed_first_name = self.validator.hash(first_name)
                 res_first_name_check = self.validator.checkattack(first_name)
                 if not res_first_name_check["correct"]:
                     print(res_first_name_check["message"])
@@ -268,6 +278,7 @@ class FurnicorFamilySystem:
                         continue
             while True:
                 last_name = input("Last name: ")  # Last name
+                hashed_last_name = self.validator.hash(last_name)
                 res_last_name_check = self.validator.checkattack(last_name)
                 if not res_last_name_check["correct"]:
                     print(res_last_name_check["message"])
@@ -283,6 +294,7 @@ class FurnicorFamilySystem:
                         continue
             while True:
                 street = input("Street: ")  # Street
+                hashed_street = self.validator.hash(street)
                 res_street_check = self.validator.checkattack(street)
                 if not res_street_check["correct"]:
                     print(res_street_check["message"])
@@ -298,6 +310,7 @@ class FurnicorFamilySystem:
                         continue
             while True:
                 housenumber = input("House number: ")  # Housenumber
+                hashed_housenumber = self.validator.hash(housenumber)
                 res_housenumber_check = self.validator.checkattack(housenumber)
                 if not res_housenumber_check["correct"]:
                     print(res_housenumber_check["message"])
@@ -313,6 +326,7 @@ class FurnicorFamilySystem:
                         continue
             while True:
                 zip_code = input("Zipcode [0000AA]: ")  # Postcode
+                hashed_zip_code = self.validator.hash(zip_code)
                 res_zip_code_check = self.validator.checkattack(zip_code)
                 if not res_zip_code_check["correct"]:
                     print(res_zip_code_check["message"])
@@ -337,6 +351,7 @@ class FurnicorFamilySystem:
                 break
             while True:
                 email = input("Email: ")  # Email
+                hashed_email = self.validator.hash(email)
                 res_mail_check = self.validator.checkattack(email)
                 if not res_mail_check["correct"]:
                     print(res_mail_check["message"])
@@ -362,6 +377,7 @@ class FurnicorFamilySystem:
                     res_mobile_phone = self.validator.checkphonenumber(phonenumber)
                     if res_mobile_phone["correct"]:
                         mobile_phone = landcode + phonenumber
+                        hashed_mobile_phone = self.validator.hash(mobile_phone)
                         break
                     else:
                         print(res_mobile_phone["message"])
@@ -369,8 +385,8 @@ class FurnicorFamilySystem:
             edit_member = False
         self.cursor.execute(
             "UPDATE members set first_name=?, last_name=?, street=?, housenumber=?, zipcode=?, city=?, email=?, phone=? WHERE membership_id=?;",
-            (first_name, last_name, street, housenumber, zip_code, self.validator.cities[city], email,
-             mobile_phone, member_id))
+            (hashed_first_name, hashed_last_name, hashed_street, hashed_housenumber, hashed_zip_code, self.validator.cities[city], hashed_email,
+             hashed_mobile_phone, member_id))
         self.connection.commit()
         self.logger.log(self.user.username, f"Edited member id: {member_id}",
                         f" edited member: {first_name} {last_name}", "No")
@@ -539,8 +555,8 @@ class FurnicorFamilySystem:
                     "11: List users with rights\n"
                     "12: Search member\n"
                     "13: Create new Encryption key\n"
-                    "13: Log out\n"
-                    "14: Exit")
+                    "14: Log out\n"
+                    "15: Exit")
                 option = input("Choose option from 1 to 14. Just type the number and hit enter: ")
                 self.logger.log(self.user.username, "Choose option", f"option: {option}", "No")
                 if option == "1":
@@ -1175,6 +1191,27 @@ class FurnicorFamilySystem:
 
         zipObj.close()
 
+    def restoreFromBackup(self):
+        
+        zipObj = ZipFile("_Backup.zip","r")
+        zipObj.extractall("")
+
+        try:
+            self.connection = sqlite3.connect("sqllite_backup.db")
+            self.cursor = self.connection.cursor()
+            self.cursor.execute('''CREATE TABLE IF NOT EXISTS members
+                               (id integer PRIMARY KEY AUTOINCREMENT, membership_id integer UNIQUE, first_name text,
+                               last_name text, street text, housenumber text, zipcode text, 
+                               city text, email text, phone text, 
+                               registration_date datetime default current_timestamp)''')
+            self.cursor.execute('''CREATE TABLE IF NOT EXISTS employees
+                                           (id integer PRIMARY KEY AUTOINCREMENT, 
+                                           username text UNIQUE, password text,
+                                           registration_date datetime default current_timestamp, rights text)''')
+        except Error as e:
+            print(f"--Cannot connect to the database, connection error: {e} \n Please check the error and try again--")
+        self.dbname = "sqllite_backup.db"
+
     def deletemember(self, membership_id):
         print(f"Deleting member {membership_id}")
         res_delete_member_check = self.validator.checkattack(membership_id)
@@ -1284,8 +1321,8 @@ class FurnicorFamilySystem:
         members = search.fetchall()
         if members:
             for x in members:
-                print(f"ID: {x[0]}, Membership ID: {x[1]}, Name: {x[2]}, Street and number: {x[3]}, "
-                      f"Zipcode: {x[4]}, City: {x[5]}, Email: {x[6]}, Registration date: {x[7]}")
+                print(f"ID: {x[0]}, Membership ID: {x[1]}, First name: {self.validator.unhash(x[2])}, Last name: {self.validator.unhash(x[3])}, "
+                      f"Street and number: {self.validator.unhash(x[4])}  {self.validator.unhash(x[5])}, Zipcode: {self.validator.unhash(x[6])}, City: {x[7]}, Email: {self.validator.unhash(x[8])}, Phone number:{self.validator.unhash(x[9])}, Registration date : {x[10]}")
         else:
             print(f"No members found with input {member_to_search}, please try again")
         self.logger.log(self.user.username, "Searched members", f" input search command: {member_to_search} at function: searchmember", "No")
