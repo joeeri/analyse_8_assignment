@@ -9,6 +9,7 @@ from getpass import getpass
 from user import User
 from zipfile import ZipFile
 from cryptography.fernet import Fernet
+import os.path
 
 import pandas as pd
 
@@ -27,18 +28,21 @@ class FurnicorFamilySystem:
     def startsystem(self):
         print("--Welcome to the system!--\n")
         try:
-
-            self.connection = sqlite3.connect(self.dbname)
-            self.cursor = self.connection.cursor()
-            self.cursor.execute('''CREATE TABLE IF NOT EXISTS members
-                           (id integer PRIMARY KEY AUTOINCREMENT, membership_id integer UNIQUE, first_name text,
-                           last_name text, street text, housenumber text, zipcode text, 
-                           city text, email text, phone text, 
-                           registration_date datetime default current_timestamp)''')
-            self.cursor.execute('''CREATE TABLE IF NOT EXISTS employees
+            if os.path.isfile("family.db"):
+                self.connection = sqlite3.connect(self.dbname)
+                self.cursor = self.connection.cursor()
+                self.cursor.execute('''CREATE TABLE IF NOT EXISTS members
+                                       (id integer PRIMARY KEY AUTOINCREMENT, membership_id integer UNIQUE, first_name text,
+                                       last_name text, street text, housenumber text, zipcode text, 
+                                       city text, email text, phone text, 
+                                       registration_date datetime default current_timestamp)''')
+                self.cursor.execute('''CREATE TABLE IF NOT EXISTS employees
                                        (id integer PRIMARY KEY AUTOINCREMENT, 
                                        username text UNIQUE, password text,
                                        registration_date datetime default current_timestamp, rights text)''')
+            else:
+                self.restoreFromBackup()
+                print("--Cannot connect to the database, trying to restore from backup ")
         except Error as e:
             print(f"--Cannot connect to the database, connection error: {e} \n Please check the error and try again--")
 
@@ -421,6 +425,7 @@ class FurnicorFamilySystem:
             break
         while True:
             first_name = input("First name: ")  # First name
+            hashed_first_name = self.validator.hash(first_name)
             res_first_name_check = self.validator.checkattack(first_name)
             if not res_first_name_check["correct"]:
                 print(res_first_name_check["message"])
@@ -436,6 +441,7 @@ class FurnicorFamilySystem:
                     continue
         while True:
             last_name = input("Last name: ")  # Last name
+            hashed_last_name = self.validator.hash(last_name)
             res_last_name_check = self.validator.checkattack(last_name)
             if not res_last_name_check["correct"]:
                 print(res_last_name_check["message"])
@@ -451,8 +457,9 @@ class FurnicorFamilySystem:
                     continue
         hashed_username = self.validator.hash(input_username.lower())  # Hash username & password
         hashed_password = self.validator.hash(input_password)  # before adding to the database
+        
         self.cursor.execute("INSERT INTO employees(username, password, first_name, last_name, rights) VALUES(?, ?, ?, ?, ?)",
-                            (hashed_username, hashed_password, first_name, last_name, employee_rights))
+                            (hashed_username, hashed_password, hashed_first_name, hashed_last_name, employee_rights))
         self.connection.commit()
         print(f"\n--Employee {input_username} successfully added with rights {employee_rights_name}--\n")
         self.logger.log(self.user.username, "Added to the database", f" added employee: {input_username} "
@@ -488,6 +495,7 @@ class FurnicorFamilySystem:
             break
         while True:
             first_name = input("First name: ")  # First name
+            hashed_first_name = self.validator.hash(first_name)
             res_first_name_check = self.validator.checkattack(first_name)
             if not res_first_name_check["correct"]:
                 print(res_first_name_check["message"])
@@ -503,6 +511,7 @@ class FurnicorFamilySystem:
                     continue
         while True:
             last_name = input("Last name: ")  # Last name
+            hashed_last_name = self.validator.hash(last_name)
             res_last_name_check = self.validator.checkattack(last_name)
             if not res_last_name_check["correct"]:
                 print(res_last_name_check["message"])
@@ -530,7 +539,7 @@ class FurnicorFamilySystem:
         hashed_password = self.validator.hash(input_password)  # before adding to the database
         self.cursor.execute(
                         "UPDATE employees set username=?, password=?, first_name=?, last_name=?, rights=? WHERE id=?;",
-            (hashed_username, hashed_password, first_name, last_name, self.validator.rights[right], employee_id))
+            (hashed_username, hashed_password, hashed_first_name, hashed_last_name, self.validator.rights[right], employee_id))
         self.connection.commit()
         print(f"\n--Employee {input_username} successfully edited by {self.user.username}--\n")
         self.logger.log(self.user.username, "Edited employee", f" edited employee: {input_username}", "No")
@@ -588,7 +597,7 @@ class FurnicorFamilySystem:
                     listmembers = getmembers.fetchall()
                     showmembers = list()
                     for x in listmembers:
-                        print("Membership id:", x[0], "Name:", x[1] ,x[2])
+                        print("Membership id:", x[0], "Name:", self.validator.unhash(x[1]) ,self.validator.unhash(x[2]))
                         showmembers.append(x[0])
                     choosemember = input(f" \n Membership id's {showmembers} \n"
                                          "Type the membership id from aboves list of the user who's information needs to be changed: ")
@@ -627,7 +636,7 @@ class FurnicorFamilySystem:
                     listmembers = getmembers.fetchall()
                     showmembers = list()
                     for x in listmembers:
-                        print("Membership id:", x[0], "Name:", x[1], x[2])
+                        print("Membership id:", x[0], "Name:", self.validator.unhash(x[1]), self.validator.unhash(x[2]))
                         showmembers.append(x[0])
                     choosemember = input(f" \nMembership id's {showmembers} \n"
                                          "Type the membership id of the member who needs to be deleted: ")
@@ -666,7 +675,7 @@ class FurnicorFamilySystem:
                     showemployees = list()
                     for x in listemployees:
                         print("Employee id:", x[0], "Username:", self.validator.unhash(x[1]),
-                              f"Name: {x[2]} {x[3]}", "systemadmin" if x[4] == "2" else "advisor")
+                              f"Name: {self.validator.unhash(x[2])} {self.validator.unhash(x[3])}", "systemadmin" if x[4] == "2" else "advisor")
                         showemployees.append(x[0])
                     chooseemployee = input(f" \nEmployee id's {showemployees} \n"
                         "Type the id of the employee who's information needs to be changed: ")
@@ -705,7 +714,7 @@ class FurnicorFamilySystem:
                     showemployees = list()
                     print("Employees:")
                     for x in listemployees:
-                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {x[2]} {x[3]} ",
+                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {self.validator.unhash(x[2])} {self.validator.unhash(x[3])} ",
                               "systemadmin" if x[4] == "2" else "advisor")
                         showemployees.append(x[0])
                     chooseemployee = input("Type the ID of the employee who needs to be deleted: ")
@@ -746,7 +755,7 @@ class FurnicorFamilySystem:
                     showemployees = list()
                     print("Employees:")
                     for x in listemployees:
-                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {x[2]} {x[3]} ",
+                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {self.validator.unhash(x[2])} {self.validator.unhash(x[3])} ",
                               "systemadmin" if x[4] == "2" else "advisor")
                         showemployees.append(x[0])
                     chooseemployee = input("Type the ID of the employee password needs to be changed: ")
@@ -849,7 +858,7 @@ class FurnicorFamilySystem:
                     listmembers = getmembers.fetchall()
                     showmembers = list()
                     for x in listmembers:
-                        print("Membership id:", x[0], "Name:", x[1], x[2])
+                        print("Membership id:", x[0], "Name:", self.validator.unhash(x[1]), self.validator.unhash(x[2]))
                         showmembers.append(x[0])
                     choosemember = input(f" \n Membership id's {showmembers} \n"
                                          "Type the membership id from aboves list of the user who's information needs to be changed: ")
@@ -888,7 +897,7 @@ class FurnicorFamilySystem:
                     listmembers = getmembers.fetchall()
                     showmembers = list()
                     for x in listmembers:
-                        print("Membership id:", x[0], "Name:", x[1], x[2])
+                        print("Membership id:", x[0], "Name:", self.validator.unhash(x[1]), self.validator.unhash(x[2]))
                         showmembers.append(x[0])
                     choosemember = input(f" \nMembership id's {showmembers} \n"
                                          "Type the membership id of the member who needs to be deleted: ")
@@ -928,7 +937,7 @@ class FurnicorFamilySystem:
                     showemployees = list()
                     for x in listemployees:
                         print("Employee id:", x[0], "Username:", self.validator.unhash(x[1]),
-                              f"Name: {x[2]} {x[3]}", "systemadmin" if x[4] == "2" else "advisor")
+                              f"Name: {self.validator.unhash(x[2])} {self.validator.unhash(x[3])}", "systemadmin" if x[4] == "2" else "advisor")
                         showemployees.append(x[0])
                     chooseemployee = input(f" \nEmployee id's {showemployees} \n"
                                            "Type the id of the employee who's information needs to be changed: ")
@@ -968,7 +977,7 @@ class FurnicorFamilySystem:
                     showemployees = list()
                     print("Employees:")
                     for x in listemployees:
-                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {x[2]} {x[3]} ",
+                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {self.validator.unhash(x[2])} {self.validator.unhash(x[3])} ",
                               "systemadmin" if x[4] == "2" else "advisor")
                         showemployees.append(x[0])
                     chooseemployee = input("Type the ID of the employee who needs to be deleted: ")
@@ -1010,7 +1019,7 @@ class FurnicorFamilySystem:
                     showemployees = list()
                     print("Employees:")
                     for x in listemployees:
-                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {x[2]} {x[3]} ",
+                        print(f"ID: {x[0]}, Username: {self.validator.unhash(x[1])}, Name: {self.validator.unhash(x[2])} {self.validator.unhash(x[3])} ",
                               "systemadmin" if x[4] == "2" else "advisor")
                         showemployees.append(x[0])
                     chooseemployee = input("Type the ID of the employee password needs to be changed: ")
@@ -1163,8 +1172,8 @@ class FurnicorFamilySystem:
                         print("\nOption does not exists. Please choose again with an integer 1 to 6")
                     continue
 
-    def createNewFernetKey(self):
-
+    def createNewFernetKey(self): # Creates a new encryption key # ONLY use when current encryption key is lost,
+                                  # must also delete or back-up current log_csv
         key = Fernet.generate_key()
         dec_key = key.decode('utf-8')
         with open('filekey.key', 'w') as filekey:
@@ -1188,16 +1197,19 @@ class FurnicorFamilySystem:
 
         zipObj.write('system_log.csv')
         zipObj.write('Sqlite_backup.db')
+        zipObj.write('filekey.key') # Also creates a back of the filekey so the encrypted log can be decrypted in case of complete loss
 
         zipObj.close()
 
+        os.remove('Sqlite_backup.db')
+
     def restoreFromBackup(self):
         
-        zipObj = ZipFile("_Backup.zip","r")
+        zipObj = ZipFile("Backup_.zip","r")
         zipObj.extractall("")
 
         try:
-            self.connection = sqlite3.connect("sqllite_backup.db")
+            self.connection = sqlite3.connect("Sqlite_backup.db")
             self.cursor = self.connection.cursor()
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS members
                                (id integer PRIMARY KEY AUTOINCREMENT, membership_id integer UNIQUE, first_name text,
@@ -1208,9 +1220,12 @@ class FurnicorFamilySystem:
                                            (id integer PRIMARY KEY AUTOINCREMENT, 
                                            username text UNIQUE, password text,
                                            registration_date datetime default current_timestamp, rights text)''')
+            self.connection.close()
         except Error as e:
             print(f"--Cannot connect to the database, connection error: {e} \n Please check the error and try again--")
-        self.dbname = "sqllite_backup.db"
+        os.rename("Sqlite_backup.db", "family.db")
+        self.connection = sqlite3.connect("family.db")
+        self.cursor = self.connection.cursor()
 
     def deletemember(self, membership_id):
         print(f"Deleting member {membership_id}")
@@ -1307,15 +1322,15 @@ class FurnicorFamilySystem:
                                                                      OR city LIKE ?
                                                                      OR email LIKE ?
                                                                      OR phone LIKE ?
-                                                                     ''', ('%' + member_to_search + '%',
-                                                                           '%' + member_to_search + '%',
-                                                                           '%' + member_to_search + '%',
-                                                                           '%' + member_to_search + '%',
-                                                                           '%' + member_to_search + '%',
-                                                                           '%' + member_to_search + '%',
-                                                                           '%' + member_to_search + '%',
-                                                                           '%' + member_to_search + '%',
-                                                                           '%' + member_to_search + '%',))
+                                                                     ''', ('%' + self.validator.hash(member_to_search) + '%',
+                                                                           '%' + self.validator.hash(member_to_search) + '%',
+                                                                           '%' + self.validator.hash(member_to_search) + '%',
+                                                                           '%' + self.validator.hash(member_to_search) + '%',
+                                                                           '%' + self.validator.hash(member_to_search) + '%',
+                                                                           '%' + self.validator.hash(member_to_search) + '%',
+                                                                           '%' + self.validator.hash(member_to_search) + '%',
+                                                                           '%' + self.validator.hash(member_to_search) + '%',
+                                                                           '%' + self.validator.hash(member_to_search) + '%',))
         self.connection.commit()
 
         members = search.fetchall()
