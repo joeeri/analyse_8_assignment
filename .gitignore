@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Log & db
+system_log.csv
+family.db
+
 # IDE
 .idea
 
