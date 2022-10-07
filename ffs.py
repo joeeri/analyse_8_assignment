@@ -58,6 +58,16 @@ class FurnicorFamilySystem:
         attemps_left = 4 # five attemps
         while not self.logged_in:
             input_username = self.validator.hash(input("Username: ").lower())
+            check_unhash_input_username_string = self.validator.unhash(input_username)
+            check_unhash_input_username_attack = self.validator.checkattack(check_unhash_input_username_string)
+            if not check_unhash_input_username_attack["correct"]:
+                print(check_unhash_input_username_attack["message"])
+                self.logger.log("None",
+                                "Malicious input detected: field (username) "
+                                               "at login",
+                                f"try login with SQL-like language, input: {check_unhash_input_username_string}", "Yes")
+                self.forceexit()
+                break
             input_password = self.validator.hash(getpass('Password: '))
             self.cursor.execute("SELECT * FROM employees WHERE username = ? AND password = ?",
                                 (input_username, input_password))  # Prevent SQL Injection by using prepared statements
@@ -197,7 +207,7 @@ class FurnicorFamilySystem:
                     print(res_city_check["message"])
                     return {"attack": True,
                             "log": "Malicious input detected: field (city) at 'addmember'",
-                            "add_info": f"while adding members city: {city}"}
+                            "add_info": f"while selecting members city: {city}"}
                 else:
                     res_city_check = self.validator.validateserver(city)
                     if res_city_check["correct"]:

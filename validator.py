@@ -18,8 +18,10 @@ class Validator:
         self.cities = {"1": "Rotterdam", "2": "Den Haag", "3": "Amsterdam", "4": "Leiden", "5": "Utrecht",
                           "6": "Arnhem", "7": "Nijmegen", "8": "Enschede", "9": "Groningen", "10": "Leeuwaarden"}
         self.rights = {"systemadmin" : "2", "advisor": "3"}
-        self.red_flags_sql_injection = ["alter", "begin", "break", "commit", "create", "cursor", "drop", "select" ,"insert", "update",
-                            "while", ";", "--"]
+        self.red_flags_sql_injection = ["alter", "ALTER", "begin", "BEGIN", "break", "BREAK", "commit", "COMMIT",
+                                        "create", "CREATE", "cursor", "CURSOR", "drop", "DROP", "from", "FROM",
+                                        "select", "SELECT", "insert", "INSERT", "update", "UPDATE", "while", "WHILE",
+                                        ";", "--"]
         self.hash_number = 2
 
     def checkusername(self, input_username):
