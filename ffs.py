@@ -191,15 +191,20 @@ class FurnicorFamilySystem:
 
             while True:
                 city = input(
-                    f"{self.validator.cities}  \nChoose city by entering it's number (1 - 10): ")  # Stad
-                res_city_check = self.validator.validateserver(city)  # If this input is not correct the
+                    f"Choose city by entering it's number (1 - 10): \n   {self.validator.cities}")  # Stad
+                res_city_check = self.validator.checkattack(city)  # If this input is not correct the
                 if not res_city_check["correct"]:  # session will be stopped
                     print(res_city_check["message"])
                     return {"attack": True,
                             "log": "Malicious input detected: field (city) at 'addmember'",
-                            "add_info": f"while selecting new members city: {city}"}
-                break
-
+                            "add_info": f"while adding members city: {city}"}
+                else:
+                    res_city_check = self.validator.validateserver(city)
+                    if res_city_check["correct"]:
+                        break
+                    else:
+                        print(res_city_check["message"])
+                        continue
             while True:
                 email = input("Email: ")  # Email
                 hashed_email = self.validator.hash(email)
@@ -346,13 +351,19 @@ class FurnicorFamilySystem:
             while True:
                 city = input(
                     f"Choose city by entering it's number (1 - 10): \n   {self.validator.cities}")  # Stad
-                res_city_check = self.validator.validateserver(city)  # If this input is not correct the
+                res_city_check = self.validator.checkattack(city)  # If this input is not correct the
                 if not res_city_check["correct"]:  # session will be stopped
                     print(res_city_check["message"])
                     return {"attack": True,
                             "log": "Malicious input detected: field (city) at 'editmember'",
                             "add_info": f"while editing members city: {city}"}
-                break
+                else:
+                    res_city_check = self.validator.validateserver(city)
+                    if res_city_check["correct"]:
+                        break
+                    else:
+                        print(res_city_check["message"])
+                        continue
             while True:
                 email = input("Email: ")  # Email
                 hashed_email = self.validator.hash(email)
@@ -528,13 +539,19 @@ class FurnicorFamilySystem:
         while True:
             right = input(f"{self.validator.rights}\n"
                 "Choose right by entering it's right (superadmin or advisor): ")  # Rights
-            res_right_check = self.validator.validateright(right)  # If this input is not correct the
+            res_right_check = self.validator.checkattack(right)  # If this input is not correct the
             if not res_right_check["correct"]:  # session will be stopped
                 print(res_right_check["message"])
                 return {"attack": True,
                         "log": "Malicious input detected: field (right) at 'editemployee'",
                         "add_info": f"while editing employee's new right: {right}"}
-            break
+            else:
+                res_right_check = self.validator.validateright(right)
+                if res_right_check["correct"]:
+                    break
+                else:
+                    print(res_right_check["message"])
+                    continue
         hashed_username = self.validator.hash(input_username.lower())  # Hash username & password
         hashed_password = self.validator.hash(input_password)  # before adding to the database
         self.cursor.execute(
