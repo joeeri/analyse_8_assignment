@@ -590,7 +590,7 @@ class FurnicorFamilySystem:
                     "10: Update password from an employee\n"
                     "11: List users with rights\n"
                     "12: Search member\n"
-                    "13: Create new Encryption key\n"
+                    "13: Create new Encryption key (Only use when current key is lost) \n"
                     "14: Log out\n"
                     "15: Exit")
                 option = input("Choose option from 1 to 14. Just type the number and hit enter: ")
@@ -824,7 +824,11 @@ class FurnicorFamilySystem:
                         self.forceexit()
                         break
                 elif option == "13":
-                    self.createNewFernetKey()
+                    doublecheck = input("Type YES (capital) if you want to continue, anything else to discontinue : ")
+                    if doublecheck == "YES":
+                        self.createNewFernetKey()
+                    else :
+                        print("Cancelling the creation of a new filekey")
                 elif option == "14":
                     self.logout()
                     user_in_menu = False
